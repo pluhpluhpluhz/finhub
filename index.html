@@ -414,34 +414,26 @@
           <div class="ssec">
             <div class="slbl">🎨 Theme</div>
             <div class="tg">
-              <div class="td ton" data-t="ocean"   style="background:linear-gradient(135deg,#64ffda,#0077b6)" onclick="applyTheme('ocean')"   title="Ocean"></div>
-              <div class="td"     data-t="nebula"  style="background:linear-gradient(135deg,#da64ff,#7700b6)" onclick="applyTheme('nebula')"  title="Nebula"></div>
-              <div class="td"     data-t="inferno" style="background:linear-gradient(135deg,#ff6b6b,#b20710)" onclick="applyTheme('inferno')" title="Inferno"></div>
-              <div class="td"     data-t="forest"  style="background:linear-gradient(135deg,#64ff64,#1a7a1a)" onclick="applyTheme('forest')"  title="Forest"></div>
-              <div class="td"     data-t="sunset"  style="background:linear-gradient(135deg,#ffb347,#e67e00)" onclick="applyTheme('sunset')"  title="Sunset"></div>
-              <div class="td"     data-t="arctic"  style="background:linear-gradient(135deg,#e0ffff,#00ced1)" onclick="applyTheme('arctic')"  title="Arctic"></div>
-              <div class="td"     data-t="galaxy"  style="background:linear-gradient(135deg,#9b59b6,#2c3e50)" onclick="applyTheme('galaxy')"  title="Galaxy"></div>
-              <div class="td"     data-t="toxic"   style="background:linear-gradient(135deg,#39ff14,#006400)" onclick="applyTheme('toxic')"   title="Toxic"></div>
-              <div class="td"     data-t="rose"    style="background:linear-gradient(135deg,#ffb6c1,#db7093)" onclick="applyTheme('rose')"    title="Rose"></div>
-              <div class="td"     data-t="amber"   style="background:linear-gradient(135deg,#ffbf00,#ff8c00)" onclick="applyTheme('amber')"   title="Amber"></div>
-              <div class="td"     data-t="cosmic"  style="background:linear-gradient(135deg,#ff00ff,#00ffff)" onclick="applyTheme('cosmic')"  title="Cosmic"></div>
-              <div class="td"     data-t="shadow"  style="background:linear-gradient(135deg,#708090,#2f4f4f)" onclick="applyTheme('shadow')"  title="Shadow"></div>
-              <div class="td"     data-t="mono"    style="background:linear-gradient(135deg,#ffffff,#333333)" onclick="applyTheme('mono')"    title="Mono B&amp;W"></div>
-              <div class="td"     data-t="deepOcean" style="background:linear-gradient(135deg,#001233,#0077b6)" onclick="applyTheme('deepOcean')" title="Deep Ocean"></div>
-              <div class="td"     data-t="neonShark" style="background:linear-gradient(135deg,#64ffda,#00ff88)" onclick="applyTheme('neonShark')" title="Neon Shark"></div>
-              <div class="td"     data-t="midnight" style="background:linear-gradient(135deg,#020617,#334155)" onclick="applyTheme('midnight')" title="Midnight"></div>
-              <div class="td"     data-t="schoolMode" style="background:linear-gradient(135deg,#1d4ed8,#22c55e)" onclick="applyTheme('schoolMode')" title="School Mode"></div>
-              <div class="td"     data-t="purpleGlow" style="background:linear-gradient(135deg,#7c3aed,#ec4899)" onclick="applyTheme('purpleGlow')" title="Purple Glow"></div>
+              <div class="td ton" data-t="ocean"   style="background:linear-gradient(135deg,#64ffda,#0077b6)" onmouseenter="previewTheme('ocean')" onmouseleave="endThemePreview()" onclick="applyTheme('ocean')"   title="Ocean"></div>
+              <div class="td"     data-t="nebula"  style="background:linear-gradient(135deg,#da64ff,#7700b6)" onmouseenter="previewTheme('nebula')" onmouseleave="endThemePreview()" onclick="applyTheme('nebula')"  title="Nebula"></div>
+              <div class="td"     data-t="inferno" style="background:linear-gradient(135deg,#ff6b6b,#b20710)" onmouseenter="previewTheme('inferno')" onmouseleave="endThemePreview()" onclick="applyTheme('inferno')" title="Inferno"></div>
+              <div class="td"     data-t="forest"  style="background:linear-gradient(135deg,#64ff64,#1a7a1a)" onmouseenter="previewTheme('forest')" onmouseleave="endThemePreview()" onclick="applyTheme('forest')"  title="Forest"></div>
+              <div class="td"     data-t="sunset"  style="background:linear-gradient(135deg,#ffb347,#e67e00)" onmouseenter="previewTheme('sunset')" onmouseleave="endThemePreview()" onclick="applyTheme('sunset')"  title="Sunset"></div>
+              <div class="td"     data-t="arctic"  style="background:linear-gradient(135deg,#e0ffff,#00ced1)" onmouseenter="previewTheme('arctic')" onmouseleave="endThemePreview()" onclick="applyTheme('arctic')"  title="Arctic"></div>
+              <div class="td"     data-t="galaxy"  style="background:linear-gradient(135deg,#9b59b6,#2c3e50)" onmouseenter="previewTheme('galaxy')" onmouseleave="endThemePreview()" onclick="applyTheme('galaxy')"  title="Galaxy"></div>
+              <div class="td"     data-t="toxic"   style="background:linear-gradient(135deg,#39ff14,#006400)" onmouseenter="previewTheme('toxic')" onmouseleave="endThemePreview()" onclick="applyTheme('toxic')"   title="Toxic"></div>
+              <div class="td"     data-t="rose"    style="background:linear-gradient(135deg,#ffb6c1,#db7093)" onmouseenter="previewTheme('rose')" onmouseleave="endThemePreview()" onclick="applyTheme('rose')"    title="Rose"></div>
+              <div class="td"     data-t="amber"   style="background:linear-gradient(135deg,#ffbf00,#ff8c00)" onmouseenter="previewTheme('amber')" onmouseleave="endThemePreview()" onclick="applyTheme('amber')"   title="Amber"></div>
+              <div class="td"     data-t="cosmic"  style="background:linear-gradient(135deg,#ff00ff,#00ffff)" onmouseenter="previewTheme('cosmic')" onmouseleave="endThemePreview()" onclick="applyTheme('cosmic')"  title="Cosmic"></div>
+              <div class="td"     data-t="shadow"  style="background:linear-gradient(135deg,#708090,#2f4f4f)" onmouseenter="previewTheme('shadow')" onmouseleave="endThemePreview()" onclick="applyTheme('shadow')"  title="Shadow"></div>
+              <div class="td"     data-t="mono"    style="background:linear-gradient(135deg,#ffffff,#333333)" onmouseenter="previewTheme('mono')" onmouseleave="endThemePreview()" onclick="applyTheme('mono')"    title="Mono B&amp;W"></div>
+              <div class="td"     data-t="deepOcean" style="background:linear-gradient(135deg,#001233,#0077b6)" onmouseenter="previewTheme('deepOcean')" onmouseleave="endThemePreview()" onclick="applyTheme('deepOcean')" title="Deep Ocean"></div>
+              <div class="td"     data-t="neonShark" style="background:linear-gradient(135deg,#64ffda,#00ff88)" onmouseenter="previewTheme('neonShark')" onmouseleave="endThemePreview()" onclick="applyTheme('neonShark')" title="Neon Shark"></div>
+              <div class="td"     data-t="midnight" style="background:linear-gradient(135deg,#020617,#334155)" onmouseenter="previewTheme('midnight')" onmouseleave="endThemePreview()" onclick="applyTheme('midnight')" title="Midnight"></div>
+              <div class="td"     data-t="schoolMode" style="background:linear-gradient(135deg,#1d4ed8,#22c55e)" onmouseenter="previewTheme('schoolMode')" onmouseleave="endThemePreview()" onclick="applyTheme('schoolMode')" title="School Mode"></div>
+              <div class="td"     data-t="purpleGlow" style="background:linear-gradient(135deg,#7c3aed,#ec4899)" onmouseenter="previewTheme('purpleGlow')" onmouseleave="endThemePreview()" onclick="applyTheme('purpleGlow')" title="Purple Glow"></div>
             </div>
             <div style="margin-top:14px">
-              <div class="slbl">Theme presets</div>
-              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px">
-                <button class="sap" style="margin:0;padding:10px;font-size:.78rem;background:linear-gradient(135deg,#001233,#0077b6)" onmouseenter="previewTheme('deepOcean')" onmouseleave="endThemePreview()" onclick="applyTheme('deepOcean')">Deep Ocean</button>
-                <button class="sap" style="margin:0;padding:10px;font-size:.78rem;background:linear-gradient(135deg,#64ffda,#00ff88);color:#001233" onmouseenter="previewTheme('neonShark')" onmouseleave="endThemePreview()" onclick="applyTheme('neonShark')">Neon Shark</button>
-                <button class="sap" style="margin:0;padding:10px;font-size:.78rem;background:linear-gradient(135deg,#020617,#334155)" onmouseenter="previewTheme('midnight')" onmouseleave="endThemePreview()" onclick="applyTheme('midnight')">Midnight</button>
-                <button class="sap" style="margin:0;padding:10px;font-size:.78rem;background:linear-gradient(135deg,#1d4ed8,#22c55e)" onmouseenter="previewTheme('schoolMode')" onmouseleave="endThemePreview()" onclick="applyTheme('schoolMode')">School Mode</button>
-                <button class="sap" style="margin:0;padding:10px;font-size:.78rem;background:linear-gradient(135deg,#7c3aed,#ec4899)" onmouseenter="previewTheme('purpleGlow')" onmouseleave="endThemePreview()" onclick="applyTheme('purpleGlow')">Purple Glow</button>
-              </div>
               <input class="sin" id="custom-primary" placeholder="Primary color, like #64ffda">
               <input class="sin" id="custom-accent" placeholder="Accent color, like #00b4d8">
               <button class="sap" onclick="saveCustomTheme()">Save Custom Theme</button>
@@ -1211,20 +1203,42 @@ function applyCloakPreset(type,silent){
   updateCloakTabState();
   if(!silent)showErrorToast(type==='normal'?'Cloak reset':'Cloak preset saved');
 }
-let themePreviewing=false;
+let themePreviewing=false,themePreviewSnapshot=null,themePreviewTimer=null;
 function previewTheme(t){
   if(!THEMES[t])return;
+  if(themePreviewTimer)clearTimeout(themePreviewTimer);
+  const r=document.documentElement;
+  if(!themePreviewSnapshot){
+    themePreviewSnapshot={
+      primary:r.style.getPropertyValue('--primary'),
+      accent:r.style.getPropertyValue('--accent'),
+      accentDark:r.style.getPropertyValue('--accent-dark'),
+      bodyBackground:document.body.style.background,
+      bodyBackgroundSize:document.body.style.backgroundSize
+    };
+  }
   themePreviewing=true;
-  const th=THEMES[t],r=document.documentElement;
+  const th=THEMES[t];
   r.style.setProperty('--primary',th.p);r.style.setProperty('--accent',th.a);r.style.setProperty('--accent-dark',th.a2);
   document.body.style.background=th.bg;document.body.style.backgroundSize='400% 400%';
   syncLandingBackground();
+  themePreviewTimer=setTimeout(endThemePreview,1800);
 }
 function endThemePreview(){
   if(!themePreviewing)return;
+  if(themePreviewTimer)clearTimeout(themePreviewTimer);
+  themePreviewTimer=null;
   themePreviewing=false;
-  const saved=ST.get('theme');
-  if(saved&&THEMES[saved])applyTheme(saved);
+  const r=document.documentElement,s=themePreviewSnapshot;
+  if(s){
+    r.style.setProperty('--primary',s.primary);
+    r.style.setProperty('--accent',s.accent);
+    r.style.setProperty('--accent-dark',s.accentDark);
+    document.body.style.background=s.bodyBackground;
+    document.body.style.backgroundSize=s.bodyBackgroundSize;
+    themePreviewSnapshot=null;
+    syncLandingBackground();
+  }
 }
 function saveCustomTheme(){
   const p=(document.getElementById('custom-primary')?.value||'').trim();
