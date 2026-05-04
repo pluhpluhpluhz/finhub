@@ -42,8 +42,6 @@
     .error-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     
     #lp{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(100,255,218,.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(0,180,216,.15) 0%,transparent 50%),linear-gradient(-45deg,var(--bg-deep),#112240,#0d47a1,#1565c0,var(--bg-deep));background-size:400% 400%;animation:gradientShift 20s ease infinite;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;overflow:hidden}
-    #landing-actions{transition:opacity .45s ease,transform .45s ease,visibility .45s ease}
-    body.startup-intro-pending #landing-actions{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(18px)}
     @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
     .orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.4;animation:orbFloat 20s ease-in-out infinite;pointer-events:none;z-index:1}
     .orb:nth-of-type(1){width:300px;height:300px;background:var(--primary);left:-100px;top:20%}
@@ -251,9 +249,8 @@
     </style>
     <base target="_self">
 </head>
-<body class="startup-intro-pending">
+<body>
 <script>
-setTimeout(()=>{try{document.body.classList.remove('startup-intro-pending');}catch(e){}},5200);
 (function(){
   const block=e=>{e.preventDefault();e.stopPropagation();return false;};
   document.addEventListener('contextmenu',block,true);
@@ -309,7 +306,7 @@ setTimeout(()=>{try{document.body.classList.remove('startup-intro-pending');}cat
 
       <button class="hub-sidebar-item" onclick="openLandingInAboutBlank()"><span class="ico">🕶️</span><span>Cloak Tab<small>Open about:blank copy</small></span></button>
       <button class="hub-sidebar-item" onclick="openMedia1()"><span class="ico">🎬</span><span>Media<small>Open cinema page</small></span></button>
-      <button class="hub-sidebar-item" onclick="openHammerheadProxy()"><span class="ico">🌐</span><span>Browser<small>Open clean browser tab</small></span></button>
+      <button class="hub-sidebar-item" onclick="openHammerheadProxy()"><span class="ico">🌐</span><span>Proxy<small>Open Hammerhead browser</small></span></button>
       <button class="hub-sidebar-item" onclick="openHubUpdates()"><span class="ico">📢</span><span>Updates <span class="update-badge">NEW</span><small>See what changed</small></span></button>
       <button class="hub-sidebar-item" onclick="openSuggestions()"><span class="ico">📋</span><span>Suggestions<small>Request changes</small></span></button>
       <button class="hub-sidebar-item" onclick="toggleFullscreen()"><span class="ico">⛶</span><span>Fullscreen<small>Toggle screen mode</small></span></button>
@@ -341,14 +338,14 @@ setTimeout(()=>{try{document.body.classList.remove('startup-intro-pending');}cat
       <div class="bubble-lp" style="width:45px;height:45px;left:80%;animation-duration:13s;animation-delay:1.5s"></div>
       <div class="bubble-lp" style="width:15px;height:15px;left:5%;animation-duration:19s;animation-delay:4s"></div>
       <div class="bubble-lp" style="width:55px;height:55px;left:45%;animation-duration:11s;animation-delay:.8s"></div>
-      <div id="landing-actions" style="text-align:center;z-index:10">
+      <div style="text-align:center;z-index:10">
         <h1 class="lt">🔨 Hammerhead Hub</h1>
         <p class="ls">Dive into the deep blue</p>
         <div class="br">
           <button class="b1" onclick="enterHub()">Continue →</button>
           <button class="b2" onclick="toggleFullscreen()">⛶ Fullscreen</button>
           <button class="b3" onclick="openMedia1()">🎬 Media</button>
-          <button class="b2" onclick="openHammerheadProxy()">🌐 Browser</button>
+          <button class="b2" onclick="openHammerheadProxy()">🌐 Proxy</button>
         </div>
         <div class="brs">
           <button class="bs b6" onclick="openHubUpdates()">📢 Updates <span class="update-badge">NEW</span></button>
@@ -547,7 +544,7 @@ setTimeout(()=>{try{document.body.classList.remove('startup-intro-pending');}cat
 
         <button class="setb" onclick="goMainHomepage()">🏠 Home</button>
         <button class="setb" onclick="document.getElementById('sp').classList.add('open')">⚙️ Settings</button>
-        <button class="setb" onclick="openHammerheadProxy()">🌐 Hammerhead Browser</button>
+        <button class="setb" onclick="openHammerheadProxy()">🌐 Hammerhead Proxy</button>
         <button class="setb" onclick="openDirectGameTab('https://csclub.uwaterloo.ca/~s23adhik/myPosts/imposter.html')">🎭 Imposter Game</button>
 
 
@@ -1055,21 +1052,9 @@ function initFeatureExtras(){
   runStartupIntro();
 }
 function runStartupIntro(){
-  document.body.classList.add('startup-intro-pending');
-  let revealed=false;
-  const revealLanding=()=>{if(revealed)return;revealed=true;document.body.classList.remove('startup-intro-pending');};
-  setTimeout(revealLanding,5200);
-  const start=()=>{
-    try{
-      document.querySelectorAll('.hammerhead-start-intro').forEach(e=>e.remove());
-      requestAnimationFrame(()=>{initAnimatedIntro();setTimeout(revealLanding,3600);});
-    }catch(e){
-      console.warn('Intro failed, retrying once',e);
-      setTimeout(()=>{try{initAnimatedIntro();setTimeout(revealLanding,3600);}catch(err){revealLanding();}},400);
-    }
-  };
-  if(document.readyState==='complete'||document.readyState==='interactive')setTimeout(start,120);
-  else window.addEventListener('load',()=>setTimeout(start,120),{once:true});
+  const start=()=>{try{document.querySelectorAll('.hammerhead-start-intro').forEach(e=>e.remove());initAnimatedIntro();}catch(e){console.warn('Intro failed, retrying once',e);setTimeout(()=>{try{initAnimatedIntro();}catch(err){}},400);}};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(start,80),{once:true});
+  else setTimeout(start,80);
 }
 window.addEventListener('pageshow',e=>{if(e.persisted)setTimeout(runStartupIntro,120);});
 
@@ -1125,18 +1110,18 @@ function showHubSettings(){
 }
 function openHammerheadProxy(){
   playSound('click');
-  const proxyUrl='browser/index.html';
-  const backupUrl='proxy/index.html';
+  const proxyUrl='proxy/index.html';
   const w=window.open('about:blank','_blank');
-  if(!w){showErrorToast('Allow popups to open browser');return;}
+  if(!w){showErrorToast('Allow popups to open proxy');return;}
   try{
     w.document.open();
-    w.document.write('<!DOCTYPE html><html><head><title>Hammerhead Browser</title><link rel="icon" href="'+HAMMER_ICON+'"><style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#001233,#003566,#0077b6);color:#e6f1ff;font-family:Segoe UI,system-ui,sans-serif;text-align:center;overflow:hidden}h1{font-size:2.4rem;margin:0 0 10px;color:#64ffda}.box{padding:32px;border:1px solid rgba(100,255,218,.35);border-radius:24px;background:rgba(2,6,23,.72);box-shadow:0 30px 80px rgba(0,0,0,.5);max-width:520px}p{color:#b8c7dd;line-height:1.5}.spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.18);border-top-color:#64ffda;margin:18px auto 0;animation:s .8s linear infinite}@keyframes s{to{transform:rotate(360deg)}}a{color:#64ffda}</style></head><body><div class="box"><h1>🔨 Hammerhead Browser</h1><p>Opening in a clean tab...</p><p style="font-size:.9rem;opacity:.8">If the first path is blocked, it will try the backup path.</p><div class="spin"></div></div><script>const paths=["'+proxyUrl+'","'+backupUrl+'"];let i=0;function go(){try{location.replace(paths[i]);}catch(e){location.href=paths[i];}}setTimeout(go,220);setTimeout(function(){i=1;try{document.body.innerHTML=\\'<div class="box"><h1>🔨 Hammerhead Browser</h1><p>Trying backup path...</p><div class="spin"></div></div>\\';go();}catch(e){}},2500);<\/script></body></html>');
+    w.document.write('<!DOCTYPE html><html><head><title>Hammerhead Proxy</title><link rel="icon" href="'+HAMMER_ICON+'"><style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#001233,#003566,#0077b6);color:#e6f1ff;font-family:Segoe UI,system-ui,sans-serif;text-align:center}h1{font-size:2.4rem;margin:0 0 10px;color:#64ffda}.box{padding:32px;border:1px solid rgba(100,255,218,.35);border-radius:24px;background:rgba(2,6,23,.72);box-shadow:0 30px 80px rgba(0,0,0,.5)}p{color:#b8c7dd}</style></head><body><div class="box"><h1>🔨 Hammerhead Proxy</h1><p>Opening the Hammerhead browser...</p></div></body></html>');
     w.document.close();
+    setTimeout(()=>{try{w.location.href=proxyUrl;}catch(e){}},250);
   }catch(e){
-    try{w.location.replace(proxyUrl);}catch(err){try{w.location.href=backupUrl;}catch(x){}}
+    try{w.location.href=proxyUrl;}catch(err){}
   }
-  showErrorToast('Opening Hammerhead Browser');
+  showErrorToast('Opening Hammerhead Proxy');
 }
 function openPanicSetup(){
   showHubSettings();
