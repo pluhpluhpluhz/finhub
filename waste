@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Imposter</title>
+<style>
+:root {
+  --bg:#0a0a12; --surface:#151520; --surface-hover:#1e1e30;
+  --border:rgba(255,255,255,0.06);
+  --primary:#ff2e63; --primary-glow:rgba(255,46,99,0.25);
+  --text:#f0f0f5; --text-dim:#7a7a8c;
+  --success:#00d9a5; --warning:#ffc93c; --danger:#ff4757;
+  --imposter:#ff6b81; --crew:#00d9c0;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+html,body { height:100%; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); display:flex; justify-content:center; }
+.app { width:100%; max-width:520px; min-height:100vh; padding:16px; display:flex; flex-direction:column; }
+
+/* Fullscreen button - fixed top right */
+.fs-btn {
+  position:fixed; top:12px; right:12px; z-index:10000;
+  width:44px; height:44px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--text); font-size:1.3rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+  transition:all 0.2s;
+}
+.fs-btn:active { transform:scale(0.9); background:var(--surface-hover); }
+
+.header { text-align:center; padding:10px 0 24px; }
+.logo { font-size:2.4rem; font-weight:900; letter-spacing:3px; background:linear-gradient(135deg,var(--primary),#ff8fab); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.subtitle { color:var(--text-dim); font-size:0.8rem; letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+.screen { display:none; flex-direction:column; flex:1; animation:fadeIn 0.3s ease; }
+.screen.active { display:flex; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.card { background:var(--surface); border-radius:18px; padding:20px; margin-bottom:14px; border:1px solid var(--border); }
+.card-title { font-size:0.95rem; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+input[type="text"] { width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); font-size:1rem; outline:none; font-family:inherit; margin-bottom:10px; }
+input[type="text"]:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-glow); }
+input::placeholder { color:#44445a; }
+.btn { width:100%; padding:15px; border:none; border-radius:14px; font-size:0.95rem; font-weight:700; cursor:pointer; transition:transform 0.15s; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; font-family:inherit; }
+.btn:active { transform:scale(0.97); }
+.btn:disabled { opacity:0.35; cursor:not-allowed; transform:none !important; }
+.btn-primary { background:linear-gradient(135deg,var(--primary),#c41e3a); color:white; box-shadow:0 4px 20px var(--primary-glow); }
+.btn-secondary { background:var(--surface-hover); color:var(--text); border:1px solid var(--border); }
+.btn-success { background:linear-gradient(135deg,var(--success),#00b894); color:var(--bg); }
+.btn-ghost { background:transparent; color:var(--text-dim); border:1px solid var(--border); }
+.toggle-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); }
+.toggle-row:last-child { border-bottom:none; }
+.toggle-label { font-size:0.9rem; font-weight:600; }
+.toggle-desc { font-size:0.75rem; color:var(--text-dim); margin-top:2px; }
+.toggle-switch { position:relative; width:50px; height:28px; background:var(--bg); border-radius:14px; border:2px solid var(--border); cursor:pointer; transition:all 0.3s; flex-shrink:0; }
+.toggle-switch.on { background:var(--primary); border-color:var(--primary); box-shadow:0 0 12px var(--primary-glow); }
+.toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; background:white; border-radius:50%; transition:transform 0.3s; box-shadow:0 2px 6px rgba(0,0,0,0.3); }
+.toggle-switch.on::after { transform:translateX(20px); }
+.segmented { display:flex; background:var(--bg); border-radius:10px; padding:3px; border:1px solid var(--border); }
+.segment-btn { flex:1; padding:9px; border:none; background:transparent; color:var(--text-dim); font-weight:700; font-size:0.85rem; border-radius:8px; cursor:pointer; transition:all 0.2s; font-family:inherit; }
+.segment-btn.active { background:var(--surface-hover); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+.player-list { display:flex; flex-direction:column; gap:8px; margin:10px 0; max-height:220px; overflow-y:auto; }
+.player-item { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--bg); border-radius:12px; border:1px solid var(--border); }
+.player-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--primary),#ff6b81); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.95rem; flex-shrink:0; }
+.player-name { flex:1; font-weight:600; font-size:0.9rem; }
+.player-remove { width:30px; height:30px; border:none; background:none; color:var(--danger); font-size:1.4rem; cursor:pointer; border-radius:6px; display:flex; align-items:center; justify-content:center; }
+.cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:4px; }
+.cat-card { padding:16px 8px; background:var(--bg); border:2px solid var(--border); border-radius:14px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.cat-card:hover { transform:translateY(-2px); border-color:rgba(255,46,99,0.3); }
+.cat-card.selected { border-color:var(--primary); background:rgba(255,46,99,0.06); }
+.cat-icon { font-size:1.6rem; margin-bottom:4px; }
+.cat-name { font-weight:700; font-size:0.8rem; }
+.cat-count { font-size:0.65rem; color:var(--text-dim); margin-top:2px; }
+.reveal-wrap { text-align:center; padding:10px 0 30px; flex:1; display:flex; flex-direction:column; justify-content:center; }
+.pass-label { font-size:0.95rem; color:var(--text-dim); margin-bottom:4px; }
+.pass-name { font-size:1.3rem; font-weight:800; margin-bottom:18px; }
+.secret-card { background:linear-gradient(145deg,var(--surface),#1a1a30); border:2px solid var(--primary); border-radius:24px; padding:40px 24px; margin:0 0 20px; position:relative; min-height:240px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 0 30px var(--primary-glow); }
+.cover { position:absolute; inset:-2px; background:var(--bg); border-radius:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; z-index:10; border:2px solid var(--border); }
+.cover:active { background:#0c0c14; }
+.cover-icon { font-size:3rem; margin-bottom:10px; }
+.cover-title { font-size:1.2rem; font-weight:800; margin-bottom:4px; }
+.cover-hint { color:var(--text-dim); font-size:0.8rem; }
+.s-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:3px; color:var(--primary); margin-bottom:8px; font-weight:700; }
+.s-word { font-size:2.2rem; font-weight:900; letter-spacing:1px; }
+.s-role { font-size:1.5rem; font-weight:900; margin-top:4px; }
+.s-hint { margin-top:14px; font-size:0.85rem; color:var(--text-dim); line-height:1.5; max-width:280px; }
+.role-crew { color:var(--crew); }
+.role-imposter { color:var(--imposter); }
+.timer-box { text-align:center; margin:14px 0; }
+.timer { font-size:3.5rem; font-weight:900; font-variant-numeric:tabular-nums; line-height:1; letter-spacing:2px; }
+.timer.warning { color:var(--warning); animation:pulse 1s infinite; }
+.timer.danger { color:var(--danger); animation:pulse 0.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+.timer-bar-wrap { width:100%; height:6px; background:var(--bg); border-radius:3px; margin-top:12px; overflow:hidden; border:1px solid var(--border); }
+.timer-bar { height:100%; background:linear-gradient(90deg,var(--success),var(--warning),var(--danger)); border-radius:3px; transition:width 1s linear; }
+.vote-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:12px 0; }
+.vote-card { padding:18px 8px; background:var(--bg); border:2px solid var(--border); border-radius:14px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; }
+.vote-card:active { transform:scale(0.96); }
+.vote-card.selected { border-color:var(--primary); background:rgba(255,46,99,0.08); }
+.vote-card.eliminated { border-color:var(--danger); background:rgba(255,71,87,0.1); animation:shake 0.5s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.vote-name { font-weight:800; font-size:1rem; margin-bottom:3px; }
+.vote-count { font-size:0.75rem; color:var(--text-dim); }
+.vote-badge { position:absolute; top:-5px; right:-5px; background:var(--primary); color:white; font-size:0.65rem; font-weight:800; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px var(--primary-glow); }
+.result-banner { padding:28px 18px; border-radius:20px; text-align:center; margin-bottom:18px; }
+.result-banner.crew { border:2px solid var(--success); background:rgba(0,217,165,0.06); }
+.result-banner.imposter { border:2px solid var(--imposter); background:rgba(255,107,129,0.06); }
+.result-title { font-size:1.6rem; font-weight:900; margin-bottom:6px; }
+.result-sub { color:var(--text-dim); font-size:0.9rem; }
+.score-board { display:flex; justify-content:space-around; margin:14px 0; padding:18px; background:var(--bg); border-radius:16px; border:1px solid var(--border); }
+.score-item { text-align:center; }
+.score-num { font-size:2rem; font-weight:900; }
+.score-label { font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-top:2px; font-weight:700; }
+.info-pill { background:rgba(255,46,99,0.06); border-left:3px solid var(--primary); padding:12px 14px; border-radius:0 12px 12px 0; margin-bottom:14px; font-size:0.85rem; line-height:1.5; color:var(--text-dim); }
+.info-pill strong { color:var(--text); }
+.center { text-align:center; }
+.dim { color:var(--text-dim); }
+.confetti { position:fixed; pointer-events:none; z-index:9999; font-size:1.3rem; animation:confettiFall 2.5s ease-out forwards; }
+@keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg) scale(1); opacity:1} 100%{transform:translateY(-100vh) rotate(720deg) scale(0.5); opacity:0} }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--surface-hover); border-radius:2px; }
+@media(max-width:400px) { .logo{font-size:2rem} .timer{font-size:3rem} .s-word{font-size:1.8rem} .cat-grid,.vote-grid{grid-template-columns:1fr} }
+
+/* Fullscreen styles */
+:fullscreen .app { max-width:none; padding:24px; }
+:fullscreen .fs-btn { top:20px; right:20px; }
+:-webkit-full-screen .app { max-width:none; padding:24px; }
+:-webkit-full-screen .fs-btn { top:20px; right:20px; }
+:-moz-full-screen .app { max-width:none; padding:24px; }
+:-moz-full-screen .fs-btn { top:20px; right:20px; }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<button class="fs-btn" id="fs-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen">⛶</button>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">IMPOSTER</div>
+    <div class="subtitle">Social Deduction Party Game</div>
+  </div>
+
+  <div id="scr-setup" class="screen active">
+    <div class="card">
+      <div class="card-title">👥 Players <span class="dim" style="font-weight:400">(min 3)</span></div>
+      <input type="text" id="inp-player" placeholder="Enter name and press +" maxlength="16">
+      <button class="btn btn-secondary" onclick="addPlayer()">+ Add Player</button>
+      <div id="list-players" class="player-list"></div>
+      <div id="lbl-count" class="center dim" style="font-size:0.8rem; margin-top:4px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📂 Category</div>
+      <div class="cat-grid" id="grid-cats"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚙️ Settings</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Imposters</div>
+          <div class="toggle-desc">How many imposters?</div>
+        </div>
+        <div class="segmented" id="seg-imposters">
+          <button class="segment-btn active" onclick="setImposters(1)">1</button>
+          <button class="segment-btn" onclick="setImposters(2)">2</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Imposter Hints</div>
+          <div class="toggle-desc">Give imposters a clue about the word</div>
+        </div>
+        <div class="toggle-switch" id="tog-hints" onclick="toggleHints()"></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="btn-start" onclick="startGame()" disabled>Start Game</button>
+  </div>
+
+  <div id="scr-reveal" class="screen">
+    <div class="reveal-wrap">
+      <div class="pass-label">📲 Pass the phone to</div>
+      <div class="pass-name" id="rev-name">Player</div>
+      <div class="secret-card">
+        <div class="cover" id="cover" onclick="uncover()">
+          <div class="cover-icon">🔒</div>
+          <div class="cover-title">Tap to Reveal</div>
+          <div class="cover-hint">Don't let anyone see!</div>
+        </div>
+        <div class="s-label" id="s-label">THE WORD IS</div>
+        <div class="s-word" id="s-word">PIZZA</div>
+        <div class="s-role" id="s-role"></div>
+        <div class="s-hint" id="s-hint"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-next" onclick="nextReveal()" style="display:none">Next Player →</button>
+      <button class="btn btn-success" id="btn-begin" onclick="beginDiscuss()" style="display:none">Begin Discussion 🎉</button>
+    </div>
+  </div>
+
+  <div id="scr-discuss" class="screen">
+    <div class="card center">
+      <div class="card-title" style="justify-content:center">💬 Discussion</div>
+      <div class="info-pill">
+        <strong style="color:var(--crew)">Crew:</strong> Ask about the word. Catch the Imposter!<br>
+        <strong style="color:var(--imposter)">Imposter:</strong> Blend in. Figure out the word!
+      </div>
+      <div class="timer-box">
+        <div class="timer" id="timer">03:00</div>
+        <div class="timer-bar-wrap"><div class="timer-bar" id="tbar" style="width:100%"></div></div>
+      </div>
+      <div class="dim" style="font-size:0.8rem">Category: <strong id="disc-cat" style="color:var(--text)">Food</strong></div>
+    </div>
+    <button class="btn btn-primary" onclick="endDiscuss()">End Discussion & Vote</button>
+  </div>
+
+  <div id="scr-vote" class="screen">
+    <div class="card">
+      <div class="card-title center" style="justify-content:center">🗳️ Vote</div>
+      <div class="info-pill center">Tap a name to vote. Pass the phone so everyone votes once.</div>
+      <div class="vote-grid" id="vote-grid"></div>
+      <div class="center dim" style="font-size:0.8rem; margin-top:6px">Votes: <strong id="vote-total" style="color:var(--text)">0</strong> / <span id="vote-need">0</span></div>
+    </div>
+  </div>
+
+  <div id="scr-guess" class="screen">
+    <div class="reveal-wrap">
+      <div class="pass-label">📲 Pass the phone to</div>
+      <div class="pass-name" id="guess-name" style="color:var(--imposter)">Imposter</div>
+      <div class="card" style="margin:14px 0; width:100%">
+        <div class="card-title center" style="justify-content:center">🕵️ Last Chance</div>
+        <div class="center dim" style="font-size:0.85rem; line-height:1.5; margin-bottom:12px">The crew voted wrong!<br>Guess the secret word to steal the win.</div>
+        <input type="text" id="inp-guess" placeholder="Type your guess..." maxlength="40" style="margin-bottom:12px">
+        <button class="btn btn-primary" onclick="submitGuess()">Submit Guess</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="scr-result" class="screen">
+    <div id="r-banner" class="result-banner">
+      <div class="result-title" id="r-title">Crew Wins!</div>
+      <div class="result-sub" id="r-sub">The Imposter was caught</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 The Reveal</div>
+      <div class="center" style="margin-bottom:10px">
+        <div class="dim" style="font-size:0.8rem; margin-bottom:3px">Secret word</div>
+        <div style="font-size:1.8rem; font-weight:900; color:var(--crew)">"<span id="r-word">PIZZA</span>"</div>
+      </div>
+      <div class="center" style="margin-bottom:10px">
+        <div class="dim" style="font-size:0.8rem; margin-bottom:3px">The Imposter<span id="r-imp-plural">s</span></div>
+        <div style="font-size:1.1rem; font-weight:800; color:var(--imposter)" id="r-imp">Player</div>
+      </div>
+      <div id="r-guess-box" class="center" style="padding:12px; background:var(--bg); border-radius:12px; display:none; border:1px solid var(--border)">
+        <div class="dim" style="font-size:0.8rem; margin-bottom:3px">Imposter's guess</div>
+        <div style="font-size:1.1rem; font-weight:800" id="r-guess-text"></div>
+      </div>
+    </div>
+    <div class="score-board">
+      <div class="score-item">
+        <div class="score-num" id="sc-crew" style="color:var(--crew)">0</div>
+        <div class="score-label">Crew Wins</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num" id="sc-imp" style="color:var(--imposter)">0</div>
+        <div class="score-label">Imposter Wins</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="nextRound()">Next Round →</button>
+    <button class="btn btn-ghost" onclick="resetAll()">New Game</button>
+  </div>
+</div>
+
+<script>
+// ===================== FULLSCREEN =====================
+function toggleFullscreen() {
+  var doc = document;
+  var btn = document.getElementById("fs-btn");
+  if (!doc.fullscreenElement && !doc.webkitFullscreenElement && !doc.mozFullScreenElement && !doc.msFullscreenElement) {
+    var el = document.documentElement;
+    if (el.requestFullscreen) { el.requestFullscreen(); }
+    else if (el.webkitRequestFullscreen) { el.webkitRequestFullscreen(); }
+    else if (el.mozRequestFullScreen) { el.mozRequestFullScreen(); }
+    else if (el.msRequestFullscreen) { el.msRequestFullscreen(); }
+  } else {
+    if (doc.exitFullscreen) { doc.exitFullscreen(); }
+    else if (doc.webkitExitFullscreen) { doc.webkitExitFullscreen(); }
+    else if (doc.mozCancelFullScreen) { doc.mozCancelFullScreen(); }
+    else if (doc.msExitFullscreen) { doc.msExitFullscreen(); }
+  }
+}
+function onFsChange() {
+  var btn = document.getElementById("fs-btn");
+  var doc = document;
+  var isFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+  if (btn) btn.textContent = isFs ? "✕" : "⛶";
+}
+document.addEventListener("fullscreenchange", onFsChange);
+document.addEventListener("webkitfullscreenchange", onFsChange);
+document.addEventListener("mozfullscreenchange", onFsChange);
+document.addEventListener("MSFullscreenChange", onFsChange);
+
+// ===================== WORD BANK =====================
+var WORDS = {
+  Food:["Pizza","Sushi","Taco","Burger","Pasta","Curry","Donut","Ramen","Bagel","Waffle","Burrito","Pancake","Lasagna","Falafel","Pho","Croissant","Paella","Kebab","Pretzel","Gnocchi","Ceviche","Biryani","Fondue","Tiramisu","Poke Bowl","Shawarma","Macaron","Risotto","Tempura","Bruschetta","Mochi","Poutine","Kimchi","Pad Thai","Churros","Sashimi","Gelato","Dim Sum","Steak","Salad"],
+  Animals:["Penguin","Dolphin","Tiger","Octopus","Eagle","Kangaroo","Panda","Shark","Owl","Wolf","Elephant","Giraffe","Platypus","Sloth","Hedgehog","Chameleon","Narwhal","Axolotl","Meerkat","Flamingo","Peacock","Otter","Toucan","Capybara","Red Panda","Komodo Dragon","Arctic Fox","Manta Ray","Sugar Glider","Snow Leopard","Orangutan","Pangolin","Quokka","Lynx","Seahorse","Fennec Fox","Blobfish","Tardigrade","Okapi","Mantis Shrimp"],
+  Places:["Beach","Library","Airport","Museum","Hospital","Castle","Zoo","Stadium","Cinema","Market","Eiffel Tower","Grand Canyon","Times Square","Colosseum","Mount Everest","Santorini","Machu Picchu","Venice","Pyramids","Antarctica","Amusement Park","Camping","Subway","Spa","Observatory","Greenhouse","Aquarium","Skate Park","Vineyard","Lighthouse","Waterfall","Desert","Rainforest","Volcano","Glacier","Coral Reef","Aurora","Tornado","Cave","Safari"],
+  Movies:["Inception","Titanic","Avatar","Jaws","Frozen","Gladiator","Jurassic Park","The Matrix","Toy Story","Batman","Star Wars","The Godfather","Pulp Fiction","Forrest Gump","The Lion King","Back to the Future","The Shining","Finding Nemo","The Avengers","Harry Potter","The Dark Knight","Interstellar","Parasite","Spirited Away","The Terminator","La La Land","Mad Max","Get Out","Coco","The Social Network","Whiplash","Up","The Hangover","Black Panther","Everything Everywhere","Oppenheimer","Barbie","Dune","Spider-Man","The Notebook"],
+  Objects:["Telescope","Umbrella","Backpack","Guitar","Laptop","Bicycle","Watch","Camera","Lamp","Mirror","Microphone","Drone","3D Printer","Smartphone","Headphones","Toaster","Blender","Thermostat","Projector","Flashlight","Compass","Binoculars","Stapler","Scissors","Thermos","Luggage","Wheelchair","Sunglasses","Fire Extinguisher","Corkscrew","Pocket Knife","Hourglass","Kaleidoscope","Sextant","Metronome","Polaroid Camera","Walkie-Talkie","Fidget Spinner","Rubik's Cube","Typewriter"],
+  Nature:["Volcano","Waterfall","Rainbow","Desert","Glacier","Forest","Canyon","Aurora","Coral Reef","Tornado","Geyser","Mangrove","Tide Pool","Sand Dune","Fjord","Bioluminescence","Supernova","Solar Eclipse","Thunderstorm","Hurricane","Tsunami","Earthquake","Avalanche","Wildfire","Monsoon","Tundra","Wetland","Prairie","Savanna","Cave System","Hot Spring","Iceberg","Meteor Shower","Redwood","Bamboo Forest","Salt Flat","Sinkhole","Mud Volcano","Blue Hole"],
+  Jobs:["Astronaut","Chef","Pilot","Detective","Veterinarian","Architect","Firefighter","Librarian","Photographer","Barista","Sommelier","Zookeeper","Blacksmith","Beekeeper","Stunt Double","Cartographer","Forensic Scientist","Underwater Welder","Ethical Hacker","Voice Actor","Park Ranger","Chocolatier","Storm Chaser","Lego Master Builder","Ice Cream Taster","Foley Artist","Perfumer","Snake Milker","Professional Cuddler","Golf Ball Diver","Bed Tester","Crime Scene Cleaner","Food Stylist","Elevator Mechanic","Video Game Tester","Water Slide Tester","Professional Mourner","Dice Inspector","Paper Towel Sniffer","Fortune Cookie Writer"],
+  Sports:["Basketball","Soccer","Tennis","Swimming","Golf","Boxing","Skiing","Surfing","Rock Climbing","Skateboarding","Parkour","Fencing","Archery","Pole Vault","BMX","Lacrosse","Water Polo","Curling","Rugby","Badminton","Taekwondo","Bull Riding","Ultimate Frisbee","Trampoline","Sumo Wrestling","Cricket","Hurling","Kabaddi","Sepak Takraw","Base Jumping","Wingsuit Flying","Chess Boxing","Underwater Hockey","Bossaball","Shin Kicking","Cheese Rolling","Toe Wrestling","Wife Carrying","Extreme Ironing","Ferret Legging"]
+};
+
+var HINTS = {
+  Food:{"Pizza":"Round, cheesy, often delivered","Sushi":"Raw fish on rice, Japanese","Taco":"Folded tortilla with filling","Burger":"Patty between two buns","Pasta":"Italian noodles with sauce","Curry":"Spicy sauce, often Indian","Donut":"Sweet ring, sometimes glazed","Ramen":"Japanese noodle soup bowl","Bagel":"Dense bread ring, boiled first","Waffle":"Grid-patterned breakfast item","Burrito":"Wrapped cylinder of Mexican food","Pancake":"Flat, round, stacked breakfast","Lasagna":"Layered pasta with meat and cheese","Falafel":"Fried chickpea balls in pita","Pho":"Vietnamese beef noodle soup","Croissant":"Flaky, buttery French pastry","Paella":"Spanish rice with seafood","Kebab":"Grilled meat on a skewer","Pretzel":"Twisted, salted baked snack","Gnocchi":"Soft Italian potato dumplings","Ceviche":"Raw fish cured in citrus","Biryani":"Fragrant spiced rice dish","Fondue":"Melted cheese you dip bread in","Tiramisu":"Coffee-flavored Italian dessert","Poke Bowl":"Hawaiian raw fish over rice","Shawarma":"Spit-roasted meat wrap","Macaron":"Colorful French almond cookie","Risotto":"Creamy Italian rice dish","Tempura":"Lightly battered fried Japanese food","Bruschetta":"Toasted bread with tomato topping","Mochi":"Chewy Japanese rice cake","Poutine":"Fries with gravy and cheese curds","Kimchi":"Fermented spicy Korean cabbage","Pad Thai":"Stir-fried Thai rice noodles","Churros":"Fried dough sticks with sugar","Sashimi":"Thinly sliced raw fish alone","Gelato":"Dense Italian ice cream","Dim Sum":"Small Chinese dumpling dishes","Steak":"Thick slice of grilled beef","Salad":"Mixed greens, often healthy"},
+  Animals:{"Penguin":"Black and white, cannot fly","Dolphin":"Smart sea mammal, clicks","Tiger":"Orange cat with black stripes","Octopus":"Eight-armed sea creature","Eagle":"Majestic bird of prey","Kangaroo":"Hops on two legs, pouch","Panda":"Black and white bear, eats bamboo","Shark":"Apex predator with many teeth","Owl":"Nocturnal bird, turns head far","Wolf":"Pack-hunting wild canine","Elephant":"Largest land animal, trunk","Giraffe":"Tallest animal, long neck","Platypus":"Egg-laying mammal with bill","Sloth":"Slow-moving tree dweller","Hedgehog":"Small spiny mammal","Chameleon":"Changes color, long tongue","Narwhal":"Unicorn of the sea","Axolotl":"Smiling salamander that stays young","Meerkat":"Small mongoose that stands guard","Flamingo":"Pink bird that stands on one leg","Peacock":"Bird with eye-spotted tail","Otter":"Playful aquatic mammal","Toucan":"Tropical bird with huge beak","Capybara":"World's largest rodent, chill","Red Panda":"Small, fluffy, not a real panda","Komodo Dragon":"Giant venomous lizard","Arctic Fox":"White winter coat, fluffy tail","Manta Ray":"Giant graceful ocean glider","Sugar Glider":"Tiny flying marsupial","Snow Leopard":"Elusive mountain cat","Orangutan":"Red ape, very intelligent","Pangolin":"Scaly anteater, rolls into ball","Quokka":"Happiest-looking animal on Earth","Lynx":"Wild cat with tufted ears","Seahorse":"Male carries the babies","Fennec Fox":"Tiny fox with enormous ears","Blobfish":"World's ugliest deep-sea fish","Tardigrade":"Microscopic indestructible bear","Okapi":"Zebra-striped relative of giraffe","Mantis Shrimp":"Punches faster than a bullet"},
+  Places:{"Beach":"Sand, waves, and sunshine","Library":"Quiet building full of books","Airport":"Where planes take off and land","Museum":"Building that displays artifacts","Hospital":"Place for medical treatment","Castle":"Medieval fortified residence","Zoo":"Place with caged animals","Stadium":"Large sports arena","Cinema":"Place to watch movies","Market":"Open area for buying goods","Eiffel Tower":"Iron lattice tower in Paris","Grand Canyon":"Massive Arizona rock gorge","Times Square":"Bright lights in New York","Colosseum":"Ancient Roman gladiator arena","Mount Everest":"Tallest mountain on Earth","Santorini":"Greek island with blue domes","Machu Picchu":"Incan citadel in the clouds","Venice":"Italian city of canals","Pyramids":"Ancient Egyptian triangular tombs","Antarctica":"Frozen continent at the bottom","Amusement Park":"Rides, roller coasters, fun","Camping":"Sleeping outdoors in a tent","Subway":"Underground train system","Spa":"Place for massages and relaxation","Observatory":"Building with telescopes for stars","Greenhouse":"Glass building for growing plants","Aquarium":"Building with tanks of fish","Skate Park":"Concrete ramps for boards","Vineyard":"Field where grapes grow for wine","Lighthouse":"Tower with a beacon for ships","Waterfall":"Water falling from a height","Desert":"Dry, sandy, very hot","Rainforest":"Dense jungle with heavy rain","Volcano":"Mountain that erupts lava","Glacier":"Slow-moving river of ice","Coral Reef":"Underwater ecosystem, colorful","Aurora":"Northern lights in the sky","Tornado":"Violent spinning column of air","Cave":"Natural underground hollow space","Safari":"African wildlife expedition"},
+  Movies:{"Inception":"Dreams within dreams, spinning top","Titanic":"Ship sinks, door is too small","Avatar":"Blue aliens on Pandora","Jaws":"Giant shark terrorizes beach","Frozen":"Let it go, ice princess","Gladiator":"Roman revenge in the arena","Jurassic Park":"Dinosaurs brought back to life","The Matrix":"Red pill, blue pill, simulation","Toy Story":"Toys come alive when alone","Batman":"Dark knight, no superpowers","Star Wars":"Space wizards with laser swords","The Godfather":"Mafia family crime saga","Pulp Fiction":"Nonlinear hitman anthology","Forrest Gump":"Life is like a box of chocolates","The Lion King":"Hamlet with African animals","Back to the Future":"DeLorean time machine","The Shining":"Here's Johnny, haunted hotel","Finding Nemo":"Clownfish searches ocean for son","The Avengers":"Superhero team assembles","Harry Potter":"Boy wizard at magic school","The Dark Knight":"Batman vs chaotic clown","Interstellar":"Space travel through wormholes","Parasite":"Poor family infiltrates rich home","Spirited Away":"Girl trapped in spirit world","The Terminator":"Robot from future hunts humans","La La Land":"Jazz musician meets actress","Mad Max":"Post-apocalyptic car chases","Get Out":"Horror about meeting the parents","Coco":"Day of the Dead, guitar, family","The Social Network":"Facebook origin story","Whiplash":"Drummer pushed to the limit","Up":"House flies away with balloons","The Hangover":"Vegas bachelor party gone wrong","Black Panther":"African superhero king","Everything Everywhere":"Multiverse laundromat chaos","Oppenheimer":"Man who built the atomic bomb","Barbie":"Doll comes to the real world","Dune":"Desert planet, giant worms, spice","Spider-Man":"Teen bitten by radioactive spider","The Notebook":"Romantic story read from a book"},
+  Objects:{"Telescope":"Tool to see distant stars","Umbrella":"Shield from rain or sun","Backpack":"Bag worn on your back","Guitar":"Six-stringed instrument","Laptop":"Portable computer","Bicycle":"Two-wheeled human-powered vehicle","Watch":"Wrist-worn timepiece","Camera":"Device that captures photos","Lamp":"Light source for a room","Mirror":"Reflective glass surface","Microphone":"Converts sound to electrical signal","Drone":"Flying remote-controlled robot","3D Printer":"Builds objects layer by layer","Smartphone":"Pocket computer with apps","Headphones":"Worn over ears for audio","Toaster":"Browns slices of bread","Blender":"Spins food into liquid","Thermostat":"Controls room temperature","Projector":"Throws images onto a wall","Flashlight":"Portable handheld light","Compass":"Points to magnetic north","Binoculars":"Two telescopes for both eyes","Stapler":"Fastens paper with metal","Scissors":"Two blades for cutting","Thermos":"Keeps drinks hot or cold","Luggage":"Suitcase for travel clothes","Wheelchair":"Chair with wheels for mobility","Sunglasses":"Shades that block bright light","Fire Extinguisher":"Puts out flames in emergencies","Corkscrew":"Opens wine bottles","Pocket Knife":"Small blade that folds closed","Hourglass":"Sand timer, old school clock","Kaleidoscope":"Tube with colorful patterns","Sextant":"Old naval navigation tool","Metronome":"Ticks to keep musical tempo","Polaroid Camera":"Instant photo developer","Walkie-Talkie":"Handheld two-way radio","Fidget Spinner":"Spinning toy from 2017","Rubik's Cube":"Colorful 3D puzzle","Typewriter":"Mechanical keyboard with paper"},
+  Nature:{"Volcano":"Mountain that erupts lava","Waterfall":"Water cascading down rocks","Rainbow":"Colorful arc after rain","Desert":"Dry, sandy wasteland","Glacier":"Slow river of ancient ice","Forest":"Dense area of trees","Canyon":"Deep valley with steep walls","Aurora":"Colorful lights in polar sky","Coral Reef":"Underwater colorful ecosystem","Tornado":"Violent spinning wind funnel","Geyser":"Hot water erupting from ground","Mangrove":"Tree roots in saltwater","Tide Pool":"Small ocean pools at low tide","Sand Dune":"Hill of wind-blown sand","Fjord":"Narrow sea inlet with cliffs","Bioluminescence":"Living things that glow","Supernova":"Exploding star","Solar Eclipse":"Moon blocks the sun","Thunderstorm":"Rain with lightning and thunder","Hurricane":"Massive tropical storm","Tsunami":"Giant ocean wave from earthquake","Earthquake":"Ground shaking from tectonics","Avalanche":"Snow sliding down a mountain","Wildfire":"Uncontrolled forest fire","Monsoon":"Seasonal heavy rainfall","Tundra":"Frozen treeless plain","Wetland":"Marshy area with standing water","Prairie":"Flat grassland with few trees","Savanna":"Grassland with scattered trees","Cave System":"Underground network of tunnels","Hot Spring":"Naturally heated mineral water","Iceberg":"Massive floating chunk of ice","Meteor Shower":"Many shooting stars at once","Redwood":"Tallest tree species on Earth","Bamboo Forest":"Dense grove of fast-growing stalks","Salt Flat":"Vast white dried-up lake bed","Sinkhole":"Ground collapses into underground void","Mud Volcano":"Erupts mud and gases instead of lava","Blue Hole":"Underwater vertical cave in ocean"},
+  Jobs:{"Astronaut":"Travels to space","Chef":"Cooks food professionally","Pilot":"Flies airplanes","Detective":"Solves crimes and mysteries","Veterinarian":"Doctor for animals","Architect":"Designs buildings","Firefighter":"Puts out fires and rescues","Librarian":"Manages books and libraries","Photographer":"Takes professional photos","Barista":"Makes coffee drinks","Sommelier":"Wine expert and taster","Zookeeper":"Cares for animals at the zoo","Blacksmith":"Forges metal with fire and hammer","Beekeeper":"Tends to honeybee colonies","Stunt Double":"Does dangerous scenes for actors","Cartographer":"Makes maps","Forensic Scientist":"Analyzes crime scene evidence","Underwater Welder":"Welds structures beneath the sea","Ethical Hacker":"Breaks into systems to fix them","Voice Actor":"Speaks for animated characters","Park Ranger":"Protects and manages national parks","Chocolatier":"Makes fancy chocolate confections","Storm Chaser":"Follows tornadoes for science","Lego Master Builder":"Builds sculptures from bricks","Ice Cream Taster":"Professional flavor tester","Foley Artist":"Creates sound effects for movies","Perfumer":"Creates fragrances and scents","Snake Milker":"Extracts venom from snakes","Professional Cuddler":"Gets paid to hug people","Golf Ball Diver":"Retrieves balls from water hazards","Bed Tester":"Sleeps on mattresses for quality","Crime Scene Cleaner":"Cleans up after incidents","Food Stylist":"Makes food look perfect for photos","Elevator Mechanic":"Fixes vertical transport systems","Video Game Tester":"Plays games to find bugs","Water Slide Tester":"Rides slides to check safety","Professional Mourner":"Paid to cry at funerals","Dice Inspector":"Checks casino dice for fairness","Paper Towel Sniffer":"Smells products for quality control","Fortune Cookie Writer":"Writes the messages inside"},
+  Sports:{"Basketball":"Hoops and dribbling","Soccer":"Kick ball into net, no hands","Tennis":"Racket and ball over net","Swimming":"Moving through water","Golf":"Hit ball into holes with clubs","Boxing":"Fighting with padded gloves","Skiing":"Sliding down snow on sticks","Surfing":"Riding ocean waves on board","Rock Climbing":"Scaling vertical rock faces","Skateboarding":"Riding and doing tricks on board","Parkour":"Running and jumping over obstacles","Fencing":"Sword fighting with thin blades","Archery":"Shooting arrows at targets","Pole Vault":"Jumping over bar with long pole","BMX":"Trick biking on dirt tracks","Lacrosse":"Native American stick and ball game","Water Polo":"Handball played in a pool","Curling":"Sliding stones on ice","Rugby":"Rough football without pads","Badminton":"Light racket with shuttlecock","Taekwondo":"Korean martial art, lots of kicking","Bull Riding":"Eight seconds on a bucking bull","Ultimate Frisbee":"Team sport with flying disc","Trampoline":"Bouncing high into the air","Sumo Wrestling":"Japanese heavy-weight pushing match","Cricket":"British bat and ball with wickets","Hurling":"Irish fast field game with sticks","Kabaddi":"Tag-and-breath-holding team sport","Sepak Takraw":"Volleyball played with feet only","Base Jumping":"Parachuting off fixed structures","Wingsuit Flying":"Gliding through air in squirrel suit","Chess Boxing":"Alternating chess and boxing rounds","Underwater Hockey":"Hockey played at pool bottom","Bossaball":"Volleyball on trampoline with soccer","Shin Kicking":"English sport of kicking shins","Cheese Rolling":"Chasing cheese down a steep hill","Toe Wrestling":"Arm wrestling but with feet","Wife Carrying":"Race while carrying a partner","Extreme Ironing":"Ironing clothes in dangerous places","Ferret Legging":"Keeping ferrets in your pants longest"}
+};
+
+// Build All category
+WORDS.All = [];
+HINTS.All = {};
+var allCats = Object.keys(WORDS);
+for (var ac = 0; ac < allCats.length; ac++) {
+  var cname = allCats[ac];
+  if (cname === "All") continue;
+  var arr = WORDS[cname];
+  for (var aw = 0; aw < arr.length; aw++) {
+    var w = arr[aw];
+    WORDS.All.push(w);
+    HINTS.All[w] = HINTS[cname][w];
+  }
+}
+
+// ===================== STATE =====================
+var players = [];
+var currentCat = "Food";
+var secretWord = "";
+var secretHint = "";
+var imposterIndices = [];
+var aliveImposters = [];
+var revealIdx = 0;
+var timerInterval = null;
+var timeLeft = 180;
+var votes = {};
+var scores = {crew:0, imp:0};
+var numImposters = 1;
+var hintsEnabled = false;
+var currentGuesserIdx = -1;
+var guessResults = [];
+
+// ===================== INIT =====================
+function init() {
+  renderCats();
+  renderPlayers();
+  var inp = document.getElementById("inp-player");
+  if (inp) {
+    inp.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") addPlayer();
+    });
+  }
+  var ginp = document.getElementById("inp-guess");
+  if (ginp) {
+    ginp.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") submitGuess();
+    });
+  }
+}
+
+function renderCats() {
+  var g = document.getElementById("grid-cats");
+  if (!g) return;
+  g.innerHTML = "";
+  var icons = {Food:"🍕", Animals:"🦁", Places:"🗽", Movies:"🎬", Objects:"📦", Nature:"🌲", Jobs:"💼", Sports:"⚽", All:"🎲"};
+  var keys = Object.keys(WORDS);
+  for (var i = 0; i < keys.length; i++) {
+    var c = keys[i];
+    var d = document.createElement("div");
+    d.className = "cat-card" + (c === currentCat ? " selected" : "");
+    d.innerHTML = '<div class="cat-icon">' + (icons[c] || "📁") + '</div><div class="cat-name">' + c + '</div><div class="cat-count">' + WORDS[c].length + ' words</div>';
+    d.onclick = (function(cat) { return function() { currentCat = cat; renderCats(); }; })(c);
+    g.appendChild(d);
+  }
+}
+
+function addPlayer() {
+  var inp = document.getElementById("inp-player");
+  if (!inp) return;
+  var name = inp.value.trim();
+  if (!name) return;
+  if (players.indexOf(name) !== -1) { alert("That name is already taken!"); return; }
+  players.push(name);
+  inp.value = "";
+  renderPlayers();
+}
+
+function removePlayer(i) {
+  players.splice(i, 1);
+  renderPlayers();
+}
+
+function renderPlayers() {
+  var list = document.getElementById("list-players");
+  var countLbl = document.getElementById("lbl-count");
+  var startBtn = document.getElementById("btn-start");
+  if (!list) return;
+  list.innerHTML = "";
+  for (var i = 0; i < players.length; i++) {
+    var p = players[i];
+    var d = document.createElement("div");
+    d.className = "player-item";
+    d.innerHTML = '<div class="player-avatar">' + p.charAt(0).toUpperCase() + '</div><div class="player-name">' + p + '</div><button class="player-remove" onclick="removePlayer(' + i + ')">×</button>';
+    list.appendChild(d);
+  }
+  var n = players.length;
+  var minNeeded = numImposters === 1 ? 3 : 5;
+  if (countLbl) {
+    countLbl.textContent = n < minNeeded ? "Need " + (minNeeded - n) + " more for " + numImposters + " imposter" + (numImposters > 1 ? "s" : "") : n + " players ready";
+  }
+  if (startBtn) {
+    startBtn.disabled = n < minNeeded;
+  }
+}
+
+function setImposters(n) {
+  numImposters = n;
+  var btns = document.querySelectorAll("#seg-imposters .segment-btn");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle("active", i === (n - 1));
+  }
+  renderPlayers();
+}
+
+function toggleHints() {
+  hintsEnabled = !hintsEnabled;
+  var el = document.getElementById("tog-hints");
+  if (el) el.classList.toggle("on", hintsEnabled);
+}
+
+// ===================== GAME FLOW =====================
+function startGame() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  var pool = WORDS[currentCat];
+  var idx = Math.floor(Math.random() * pool.length);
+  secretWord = pool[idx];
+  secretHint = HINTS[currentCat][secretWord] || "";
+
+  imposterIndices = [];
+  var available = [];
+  for (var i = 0; i < players.length; i++) available.push(i);
+  for (var j = 0; j < numImposters; j++) {
+    var pick = Math.floor(Math.random() * available.length);
+    imposterIndices.push(available.splice(pick, 1)[0]);
+  }
+  imposterIndices.sort(function(a,b){return a-b;});
+  aliveImposters = imposterIndices.slice();
+
+  revealIdx = 0;
+  votes = {};
+  guessResults = [];
+  currentGuesserIdx = -1;
+
+  show("scr-reveal");
+  doReveal();
+}
+
+function doReveal() {
+  var p = players[revealIdx];
+  document.getElementById("rev-name").textContent = p;
+  document.getElementById("cover").style.display = "flex";
+  document.getElementById("btn-next").style.display = "none";
+  document.getElementById("btn-begin").style.display = "none";
+
+  var isImp = false;
+  for (var i = 0; i < imposterIndices.length; i++) {
+    if (imposterIndices[i] === revealIdx) { isImp = true; break; }
+  }
+  document.getElementById("s-label").textContent = isImp ? "YOU ARE THE" : "THE WORD IS";
+  var sw = document.getElementById("s-word");
+  sw.textContent = isImp ? "" : secretWord.toUpperCase();
+  sw.style.display = isImp ? "none" : "block";
+  var sr = document.getElementById("s-role");
+  sr.textContent = isImp ? "IMPOSTER" : "CREWMATE";
+  sr.className = "s-role " + (isImp ? "role-imposter" : "role-crew");
+
+  var sh = document.getElementById("s-hint");
+  if (isImp && hintsEnabled) {
+    sh.innerHTML = '<strong style="color:var(--warning)">Hint:</strong> ' + secretHint;
+  } else if (isImp) {
+    sh.textContent = "You don't know the word. Listen to others and blend in! Try to figure it out from context.";
+  } else {
+    sh.textContent = "You know the word. Ask clever questions and watch for the Imposter who doesn't!";
+  }
+}
+
+function uncover() {
+  document.getElementById("cover").style.display = "none";
+  if (revealIdx < players.length - 1) {
+    document.getElementById("btn-next").style.display = "block";
+  } else {
+    document.getElementById("btn-begin").style.display = "block";
+  }
+}
+
+function nextReveal() {
+  revealIdx++;
+  doReveal();
+}
+
+function beginDiscuss() {
+  show("scr-discuss");
+  document.getElementById("disc-cat").textContent = currentCat;
+  startTimer(180);
+}
+
+function startTimer(sec) {
+  timeLeft = sec;
+  updateTimer();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(function() {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      endDiscuss();
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  var m = Math.floor(timeLeft / 60);
+  var s = timeLeft % 60;
+  var el = document.getElementById("timer");
+  el.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  document.getElementById("tbar").style.width = (timeLeft / 180 * 100) + "%";
+  el.classList.remove("warning", "danger");
+  if (timeLeft <= 20) el.classList.add("danger");
+  else if (timeLeft <= 60) el.classList.add("warning");
+}
+
+function endDiscuss() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  show("scr-vote");
+  renderVote();
+}
+
+// ===================== VOTING =====================
+function renderVote() {
+  var g = document.getElementById("vote-grid");
+  g.innerHTML = "";
+  votes = {};
+  for (var i = 0; i < players.length; i++) {
+    var p = players[i];
+    var d = document.createElement("div");
+    d.className = "vote-card";
+    d.dataset.idx = i;
+    d.innerHTML = '<div class="vote-name">' + p + '</div><div class="vote-count">0 votes</div>';
+    d.onclick = (function(idx) { return function() { castVote(idx); }; })(i);
+    g.appendChild(d);
+  }
+  document.getElementById("vote-need").textContent = players.length;
+  document.getElementById("vote-total").textContent = "0";
+}
+
+function castVote(idx) {
+  votes[idx] = (votes[idx] || 0) + 1;
+  updateVoteUI();
+  var total = 0;
+  var keys = Object.keys(votes);
+  for (var i = 0; i < keys.length; i++) total += votes[keys[i]];
+  document.getElementById("vote-total").textContent = total;
+  if (total >= players.length) {
+    setTimeout(resolveVote, 400);
+  }
+}
+
+function updateVoteUI() {
+  var cards = document.querySelectorAll(".vote-card");
+  for (var i = 0; i < cards.length; i++) {
+    var c = cards[i];
+    var idx = parseInt(c.dataset.idx);
+    var count = votes[idx] || 0;
+    c.querySelector(".vote-count").textContent = count + " vote" + (count !== 1 ? "s" : "");
+    if (count > 0) c.classList.add("selected"); else c.classList.remove("selected");
+    var badge = c.querySelector(".vote-badge");
+    if (count > 0) {
+      if (!badge) {
+        badge = document.createElement("div");
+        badge.className = "vote-badge";
+        c.appendChild(badge);
+      }
+      badge.textContent = count;
+    } else if (badge) {
+      badge.remove();
+    }
+  }
+}
+
+function resolveVote() {
+  var max = -1;
+  var winners = [];
+  var keys = Object.keys(votes);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    var idx = parseInt(k);
+    var count = votes[k];
+    if (count > max) { max = count; winners = [idx]; }
+    else if (count === max) { winners.push(idx); }
+  }
+
+  if (winners.length !== 1) {
+    alert("It's a tie! Resetting votes...");
+    renderVote();
+    return;
+  }
+
+  var winner = winners[0];
+  var cards = document.querySelectorAll(".vote-card");
+  for (var j = 0; j < cards.length; j++) {
+    if (parseInt(cards[j].dataset.idx) === winner) cards[j].classList.add("eliminated");
+  }
+
+  setTimeout(function() {
+    var wasImposter = false;
+    for (var k = 0; k < aliveImposters.length; k++) {
+      if (aliveImposters[k] === winner) { wasImposter = true; break; }
+    }
+    if (wasImposter) {
+      var newAlive = [];
+      for (var m = 0; m < aliveImposters.length; m++) {
+        if (aliveImposters[m] !== winner) newAlive.push(aliveImposters[m]);
+      }
+      aliveImposters = newAlive;
+      if (aliveImposters.length === 0) {
+        showResult("crew-caught-all");
+        return;
+      }
+    }
+    showGuessScreen();
+  }, 800);
+}
+
+// ===================== GUESS =====================
+function showGuessScreen() {
+  if (aliveImposters.length === 0) {
+    showResult("crew-caught-all");
+    return;
+  }
+  currentGuesserIdx = aliveImposters[0];
+  document.getElementById("guess-name").textContent = players[currentGuesserIdx];
+  show("scr-guess");
+  document.getElementById("inp-guess").value = "";
+  setTimeout(function() { document.getElementById("inp-guess").focus(); }, 100);
+}
+
+function submitGuess() {
+  var guess = document.getElementById("inp-guess").value.trim();
+  if (!guess) return;
+  var correct = guess.toLowerCase() === secretWord.toLowerCase();
+
+  guessResults.push({
+    playerIdx: currentGuesserIdx,
+    playerName: players[currentGuesserIdx],
+    guess: guess,
+    correct: correct
+  });
+
+  if (correct) {
+    showResult("imposter-win");
+  } else {
+    var newAlive = [];
+    for (var i = 0; i < aliveImposters.length; i++) {
+      if (aliveImposters[i] !== currentGuesserIdx) newAlive.push(aliveImposters[i]);
+    }
+    aliveImposters = newAlive;
+    if (aliveImposters.length > 0) {
+      setTimeout(showGuessScreen, 300);
+    } else {
+      showResult("crew-win-guessed-wrong");
+    }
+  }
+}
+
+// ===================== RESULTS =====================
+function showResult(resultType) {
+  show("scr-result");
+  var ban = document.getElementById("r-banner");
+  var title = document.getElementById("r-title");
+  var sub = document.getElementById("r-sub");
+  var guessBox = document.getElementById("r-guess-box");
+  var guessText = document.getElementById("r-guess-text");
+
+  var impNamesArr = [];
+  for (var i = 0; i < imposterIndices.length; i++) {
+    impNamesArr.push(players[imposterIndices[i]]);
+  }
+  var impNames = impNamesArr.join(" & ");
+
+  if (resultType === "crew-caught-all") {
+    ban.className = "result-banner crew";
+    title.textContent = "Crew Wins!";
+    title.style.color = "var(--success)";
+    sub.textContent = numImposters === 1 ? "The Imposter was caught!" : "All Imposters were caught!";
+    scores.crew++;
+    guessBox.style.display = "none";
+    spawnConfetti("✅");
+  }
+  else if (resultType === "imposter-win") {
+    ban.className = "result-banner imposter";
+    title.textContent = "Imposter Wins!";
+    title.style.color = "var(--imposter)";
+    sub.textContent = impNames + " guessed correctly!";
+    scores.imp++;
+    guessBox.style.display = "block";
+    var last = guessResults[guessResults.length - 1];
+    guessText.innerHTML = '"' + last.guess + '"';
+    guessText.style.color = "var(--imposter)";
+    spawnConfetti("🔥");
+  }
+  else if (resultType === "crew-win-guessed-wrong") {
+    ban.className = "result-banner crew";
+    title.textContent = "Crew Wins!";
+    title.style.color = "var(--success)";
+    sub.textContent = "The Imposter guessed wrong!";
+    scores.crew++;
+    guessBox.style.display = "block";
+    if (guessResults.length === 1) {
+      guessText.innerHTML = '"' + guessResults[0].guess + '"';
+    } else {
+      var html = "";
+      for (var g = 0; g < guessResults.length; g++) {
+        html += '<div style="margin-bottom:4px">' + guessResults[g].playerName + ': "' + guessResults[g].guess + '"</div>';
+      }
+      guessText.innerHTML = html;
+    }
+    guessText.style.color = "var(--danger)";
+    spawnConfetti("✅");
+  }
+
+  document.getElementById("r-word").textContent = secretWord;
+  document.getElementById("r-imp").textContent = impNames;
+  document.getElementById("r-imp-plural").textContent = numImposters > 1 ? "s" : "";
+  document.getElementById("sc-crew").textContent = scores.crew;
+  document.getElementById("sc-imp").textContent = scores.imp;
+}
+
+function spawnConfetti(emoji) {
+  for (var i = 0; i < 24; i++) {
+    setTimeout(function() {
+      var el = document.createElement("div");
+      el.className = "confetti";
+      el.textContent = emoji;
+      el.style.left = (10 + Math.random() * 80) + "vw";
+      el.style.bottom = "-20px";
+      el.style.animationDuration = (2 + Math.random() * 2) + "s";
+      el.style.fontSize = (1.2 + Math.random()) + "rem";
+      document.body.appendChild(el);
+      setTimeout(function() { el.remove(); }, 4500);
+    }, i * 80);
+  }
+}
+
+function nextRound() {
+  startGame();
+}
+
+function resetAll() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  players = [];
+  scores = {crew:0, imp:0};
+  renderPlayers();
+  show("scr-setup");
+}
+
+function show(id) {
+  var screens = document.querySelectorAll(".screen");
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].classList.remove("active");
+  }
+  document.getElementById(id).classList.add("active");
+}
+
+init();
+</script>
+</body>
+</html>
