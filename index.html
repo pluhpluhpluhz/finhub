@@ -1520,8 +1520,34 @@ function initHomepageTest(){
   s.onload=start;
   document.body.appendChild(s);
 }
-function enterHub(){playSound('open');document.getElementById('lp').style.display='none';document.getElementById('main-content').style.display='block';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';initHomepageTest();ensureHubSidebar();updateHubSidebarVisibility();setTimeout(showSettingsReminder,650);}
-function goMainHomepage(){playSound('click');closeGame();document.getElementById('sp').classList.remove('open');document.getElementById('main-content').style.display='none';document.getElementById('lp').style.display='flex';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';updateHubSidebarVisibility();window.scrollTo({top:0,behavior:'smooth'});}
+function enterHub(){
+  playSound('open');
+  document.getElementById('lp').style.display='none';
+  document.getElementById('main-content').style.display='block';
+  trailEnabled=false;
+  ST.set('trailEnabled','false');
+  lastTrailX=-9999;
+  lastTrailY=-9999;
+  if(fishCanvas)fishCanvas.style.display='none';
+  initHomepageTest();
+  ensureHubSidebar();
+  updateHubSidebarVisibility();
+  setTimeout(showSettingsReminder,650);
+}
+function goMainHomepage(){
+  playSound('click');
+  closeGame();
+  document.getElementById('sp').classList.remove('open');
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('lp').style.display='flex';
+  trailEnabled=false;
+  ST.set('trailEnabled','false');
+  lastTrailX=-9999;
+  lastTrailY=-9999;
+  if(fishCanvas)fishCanvas.style.display='none';
+  updateHubSidebarVisibility();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
 
 /* CLOCK */
@@ -1648,6 +1674,7 @@ function toggleTrail(){
   trailEnabled=false;ST.set('trailEnabled','false');
   document.getElementById('trail-toggle').classList.remove('active');
   destroyFish();
+  showErrorToast('Trail effects are disabled in plain mode');
 }
 function spawnTrail(x,y){
   const el=document.createElement('div');
