@@ -66,14 +66,8 @@
     .bs{padding:.75rem 1.8rem;font-size:.9rem;color:#fff}
     .b4{background:linear-gradient(135deg,#667eea,#764ba2);border:2px solid rgba(167,139,250,.5)}
     .b4:hover{transform:translateY(-3px)}
-    .b6{background:linear-gradient(135deg,#5500aa,#9900cc);border:2px solid rgba(204,102,255,.5)}
-    .b6:hover{transform:translateY(-3px)}
-    .update-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;margin-left:7px;padding:0 5px;border-radius:999px;background:#ff2d55;color:#fff;font-size:.68rem;font-weight:900;box-shadow:0 0 16px rgba(255,45,85,.72);vertical-align:middle;animation:updateBadgePulse 1.4s ease-in-out infinite}
-    .update-badge.hidden{display:none}
-    .update-tag{display:inline-flex;align-items:center;border-radius:999px;padding:3px 8px;margin-left:8px;background:rgba(255,45,85,.16);border:1px solid rgba(255,45,85,.45);color:#ff8fab;font-size:.68rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
-    .update-date{display:block;color:#8892b0;font-size:.78rem;font-weight:700;margin:2px 0 4px}
 
-    @keyframes updateBadgePulse{0%,100%{transform:scale(1);box-shadow:0 0 12px rgba(255,45,85,.55)}50%{transform:scale(1.14);box-shadow:0 0 24px rgba(255,45,85,.9)}}
+
     .cloak-btn{position:fixed;top:20px;left:20px;background:linear-gradient(135deg,#000,#111);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:12px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;z-index:100003;box-shadow:0 10px 30px rgba(0,0,0,.45)}
     .cloak-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.55)}
     .cloak-btn small{font-size:.72rem;opacity:.75;letter-spacing:.04em;text-transform:lowercase}
@@ -180,16 +174,6 @@
     #playtimer{position:fixed;bottom:24px;right:24px;background:rgba(10,25,47,.8);border:1px solid var(--border);border-radius:50px;padding:10px 20px;font-size:.875rem;color:var(--primary);z-index:100;opacity:0;transition:all var(--transition-base);cursor:pointer;backdrop-filter:blur(20px);font-weight:600}
     #playtimer:hover{opacity:1!important;transform:scale(1.05)}
     #playtimer.visible{opacity:.85}
-    #landing-choice-modal{display:none;position:fixed;inset:0;z-index:100020;background:rgba(0,0,0,.68);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:22px}
-    #landing-choice-modal.open{display:flex}
-    .landing-choice-card{width:min(420px,94vw);background:linear-gradient(180deg,rgba(10,25,47,.98),rgba(2,6,23,.98));border:1px solid rgba(100,255,218,.32);border-radius:26px;padding:26px;box-shadow:0 30px 90px rgba(0,0,0,.68);text-align:center;color:var(--text-primary)}
-    .landing-choice-card h2{font-size:1.45rem;color:var(--primary);margin-bottom:8px;background:none;-webkit-text-fill-color:currentColor;animation:none}
-    .landing-choice-card p{color:var(--text-secondary);font-size:.95rem;margin-bottom:20px}
-    .landing-choice-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .landing-choice-actions button{padding:12px 18px;font-size:.9rem;color:#fff}
-    .landing-choice-stay{background:linear-gradient(135deg,var(--primary),var(--accent));color:var(--bg-deep)!important}
-    .landing-choice-new{background:linear-gradient(135deg,var(--accent-dark),var(--accent))}
-    .landing-choice-cancel{margin-top:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-secondary)!important;padding:10px 16px!important}
     .tooltip{position:fixed;background:rgba(10,25,47,.95);color:var(--text-primary);padding:12px 18px;border-radius:12px;font-size:.875rem;pointer-events:none;z-index:9999;opacity:0;transition:all .2s;max-width:280px;line-height:1.5;border:1px solid var(--border);backdrop-filter:blur(20px);box-shadow:var(--shadow-lg);transform:translateY(10px)}
     .tooltip.show{opacity:1;transform:translateY(0)}
     #ach-popup{position:fixed;top:30px;left:50%;transform:translateX(-50%) translateY(-150px);background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;padding:20px 40px;border-radius:50px;font-weight:700;box-shadow:0 20px 60px rgba(0,180,216,.4);z-index:10000;transition:transform .6s var(--ease-spring);border:2px solid rgba(255,255,255,.2);text-align:center}
@@ -227,17 +211,6 @@
     @keyframes sakuraFly{0%{transform:translate(0,-10vh) rotate(0deg) scale(.6);opacity:0}5%{opacity:.9}95%{opacity:.7}100%{transform:translate(-120vw,110vh) rotate(1080deg) scale(.4);opacity:0}}
     .foot{text-align:center;color:var(--text-secondary);font-size:.75rem;padding:40px 0;margin-top:60px;opacity:.6}
     .foot kbd{background:rgba(100,255,218,.1);padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-family:'SF Mono',monospace;color:var(--primary);font-weight:600}
-    .hub-sidebar-toggle{position:fixed;top:18px;left:18px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(15,23,42,.98),rgba(2,6,23,.98));color:#fff;border:1px solid rgba(100,255,218,.3);z-index:100005;display:none;align-items:center;justify-content:center;font-size:1.35rem;box-shadow:0 14px 36px rgba(0,0,0,.5),0 0 22px rgba(100,255,218,.1)}
-    .hub-sidebar-toggle:hover{transform:translateY(-2px) scale(1.04);border-color:var(--primary);box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 28px rgba(100,255,218,.2)}
-    .hub-sidebar{position:fixed;top:0;left:0;width:min(320px,86vw);height:100vh;max-height:100vh;overflow:auto;z-index:100004;background:linear-gradient(180deg,rgba(3,7,18,.96),rgba(10,25,47,.94));border-right:1px solid rgba(100,255,218,.28);border-top:none;border-left:none;border-bottom:none;border-radius:0 28px 28px 0;padding:84px 14px 18px;backdrop-filter:blur(26px);box-shadow:18px 0 80px rgba(0,0,0,.62),inset -1px 0 0 rgba(255,255,255,.04);display:none;transform:translateX(0);transition:transform .28s var(--ease-out-expo),opacity .28s}
-    .hub-sidebar.closed{transform:translateX(-105%);opacity:0;pointer-events:none}
-    .hub-sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:0 8px 16px;margin-bottom:10px;border-bottom:1px solid rgba(100,255,218,.16)}
-    .hub-sidebar-title{font-weight:900;color:var(--primary);letter-spacing:.02em;font-size:1.15rem}
-    .hub-sidebar-x{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.12)}
-    .hub-sidebar-item{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:rgba(255,255,255,.04);color:var(--text-primary);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:15px 14px;margin:10px 0;font-weight:800;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
-    .hub-sidebar-item:hover{background:rgba(100,255,218,.12);border-color:rgba(100,255,218,.38);color:#fff;transform:translateX(4px)}
-    .hub-sidebar-item .ico{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(100,255,218,.1);border:1px solid rgba(100,255,218,.18);flex:0 0 auto}
-    .hub-sidebar-item small{display:block;color:var(--text-secondary);font-weight:600;margin-top:2px}
     .settings-reminder{position:fixed;inset:0;z-index:100006;background:rgba(0,0,0,.62);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px}
     .settings-reminder-card{width:min(460px,100%);background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(2,6,23,.98));border:1px solid rgba(100,255,218,.28);border-radius:24px;padding:26px;box-shadow:0 30px 90px rgba(0,0,0,.65);text-align:center}
     .settings-reminder-card h2{color:var(--primary);margin-bottom:10px;font-size:1.55rem}
@@ -246,8 +219,6 @@
     .premium-btn,.setb,.sap,.b1,.b2,.b3,.bs,.maint-btn{box-shadow:0 12px 32px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.12);letter-spacing:.01em}
     .setb,.sap{background:linear-gradient(135deg,rgba(100,255,218,.12),rgba(0,180,216,.12));border:1px solid rgba(100,255,218,.28);color:#e6f1ff}
     .setb:hover,.sap:hover{background:linear-gradient(135deg,rgba(100,255,218,.24),rgba(0,180,216,.24));border-color:var(--primary);color:#fff;transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.35),0 0 24px rgba(100,255,218,.14)}
-    body.cloaked-window .hub-sidebar-toggle{display:flex}
-    body.cloaked-window .hub-sidebar{display:block}
     ::-webkit-scrollbar{width:10px}
     ::-webkit-scrollbar-track{background:rgba(100,255,218,.05);border-radius:5px}
     ::-webkit-scrollbar-thumb{background:rgba(100,255,218,.2);border-radius:5px;border:2px solid transparent;background-clip:content-box}
@@ -256,13 +227,13 @@
     *,:before,:after{animation:none!important;transition:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;backdrop-filter:none!important}
     .orb,.bubble-lp,.maint-particles,.sakura,#bg-canvas{display:none!important}
     html,body,#lp,#maintenance-page,.con,#sp,#go,#cb,#gcw,#data-modal .modal-content,
-    .hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,
-    .cov,.nm,.fb,.pb,button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.bs,
-    .aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn{
+    .settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,
+    .cov,.nm,.fb,.pb,button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.bs,
+    .aib,.rndb,.ctb,.sort-btn,.cloak-btn{
       background-image:none!important
     }
-    body,#lp,#maintenance-page,.con,#sp,#go,.hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card{background-color:#0f172a!important}
-    button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.bs,.aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn,.pb{background-color:#1e293b!important;color:#e2e8f0!important;border:1px solid #475569!important}
+    body,#lp,#maintenance-page,.con,#sp,#go,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card{background-color:#0f172a!important}
+    button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.bs,.aib,.rndb,.ctb,.sort-btn,.cloak-btn,.pb{background-color:#1e293b!important;color:#e2e8f0!important;border:1px solid #475569!important}
     h1,.lt,.maint-icon{background:none!important;-webkit-text-fill-color:currentColor!important;color:#e2e8f0!important}
     .nm,.pb,.fb{opacity:1!important;transform:none!important}
     @media(max-width:768px){.gg{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}#sp{width:100%}#clock-widget{top:12px;right:12px;padding:12px 16px}.lt{font-size:2.5rem}.maint-message{font-size:1.8rem}#cb{padding:14px 16px}#cb .game-actions{width:100%;justify-content:flex-start}#cb .game-actions button{flex:1 1 auto}}
@@ -312,35 +283,7 @@
     <canvas id="bg-canvas"></canvas>
     <div id="clock-widget" title="Drag to move"><div class="time" id="clock-time">12:00</div><div class="date" id="clock-date">Loading...</div></div>
     <div id="playtimer" onclick="toggleTimerVisibility()">⏱️ <span id="timer-display">0:00</span></div>
-    <div id="landing-choice-modal" onclick="if(event.target===this)closeLandingChoice()">
-      <div class="landing-choice-card">
-        <h2 id="landing-choice-title">Open this?</h2>
-        <p>Choose how you want to open it.</p>
-        <div class="landing-choice-actions">
-          <button class="landing-choice-stay" onclick="runLandingChoice(false)">Stay in this tab</button>
-          <button class="landing-choice-new" onclick="runLandingChoice(true)">Open new tab</button>
-        </div>
-        <button class="landing-choice-cancel" onclick="closeLandingChoice()">Cancel</button>
-      </div>
-    </div>
     <div id="tooltip" class="tooltip"></div>
-    <button id="hub-sidebar-toggle" class="hub-sidebar-toggle" title="Open quick menu" onclick="toggleHubSidebar()">☰</button>
-    <nav id="hub-sidebar" class="hub-sidebar closed">
-      <div class="hub-sidebar-head">
-        <div class="hub-sidebar-title">Quick Menu</div>
-        <button class="hub-sidebar-x" onclick="toggleHubSidebar()">✕</button>
-      </div>
-      <button class="hub-sidebar-item" onclick="goMainHomepage()"><span class="ico">🏠</span><span>Home<small>Back to landing</small></span></button>
-      <button class="hub-sidebar-item" onclick="enterHub()"><span class="ico">🎮</span><span>Game Home<small>Open game homepage</small></span></button>
-      <button class="hub-sidebar-item" onclick="showHubSettings()"><span class="ico">⚙️</span><span>Settings<small>Cloak, theme, panic key</small></span></button>
-
-      <button class="hub-sidebar-item" onclick="openLandingInAboutBlank()"><span class="ico">🕶️</span><span>Cloak Tab<small>Open about:blank copy</small></span></button>
-      <button class="hub-sidebar-item" onclick="openMedia1()"><span class="ico">🎬</span><span>Media<small>Open cinema page</small></span></button>
-
-      <button class="hub-sidebar-item" onclick="openHubUpdates()"><span class="ico">📢</span><span>Updates <span class="update-badge">NEW</span><small>See what changed</small></span></button>
-      <button class="hub-sidebar-item" onclick="toggleFullscreen()"><span class="ico">⛶</span><span>Fullscreen<small>Toggle screen mode</small></span></button>
-    </nav>
-
 
     <div id="data-modal" onclick="if(event.target===this)closeDataModal()">
       <div class="modal-content">
@@ -371,13 +314,12 @@
         <h1 class="lt">👅 pleasegivemehead</h1>
         <p class="ls">Dive into my head</p>
         <div class="br">
-          <button class="b1" onclick="showLandingChoice('hub','Continue')">Continue →</button>
-          <button class="b2" onclick="showLandingChoice('fullscreen','Fullscreen')">⛶ Fullscreen</button>
-          <button class="b3" onclick="showLandingChoice('media','Media')">🎬 Media</button>
+          <button class="b1" onclick="enterHub()">Continue →</button>
+          <button class="b2" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+          <button class="b3" onclick="openMedia1()">🎬 Media</button>
 
         </div>
         <div class="brs">
-          <button class="bs b6" onclick="showLandingChoice('updates','Updates')">📢 Updates <span class="update-badge">NEW</span></button>
         </div>
       </div>
     </div>
@@ -438,6 +380,10 @@
             <button class="sap" onclick="exportData()">Export Settings Code</button>
             <button class="sap" onclick="document.getElementById('data-modal').style.display='flex'">Import Settings Code</button>
             <p style="color:var(--text-secondary);font-size:0.8rem;margin-top:8px">Saves favorites, play stats, panic key, themes, cloak choices, trails, and background settings.</p>
+          </div>
+          <div class="ssec">
+            <div class="slbl">📢 Updates</div>
+            <button class="sap" onclick="showUpdatesPanel()">View Changelog</button>
           </div>
         </div>
         <div id="tab-customization" class="tab-panel">
@@ -907,34 +853,10 @@ function updateFishCount(n){fishCount=parseInt(n);ST.set('fc',n);document.getEle
 function updateFishColor(hue){fishHue=parseInt(hue);ST.set('fh',hue);document.getElementById('fish-color-preview').style.background=`linear-gradient(135deg,${hslToHex(fishHue,90,80)},${hslToHex(fishHue,90,45)})`; }
 
 
-let pendingLandingChoice=null;
-function showLandingChoice(action,label){
-  pendingLandingChoice=action;
-  const modal=document.getElementById('landing-choice-modal');
-  const title=document.getElementById('landing-choice-title');
-  if(title)title.textContent='Open '+(label||'this')+'?';
-  if(modal)modal.classList.add('open');
-  playSound('click');
-}
-function closeLandingChoice(){
-  const modal=document.getElementById('landing-choice-modal');
-  if(modal)modal.classList.remove('open');
-}
-function runLandingChoice(openNewTab){
-  const action=pendingLandingChoice;
-  closeLandingChoice();
-  if(!action)return;
-  if(openNewTab){
-    openLandingActionInNewTab(action);
-    return;
-  }
-  runLandingActionHere(action);
-}
 function runLandingActionHere(action){
   if(action==='hub')enterHub();
   else if(action==='fullscreen')toggleFullscreen();
   else if(action==='media')openMedia1();
-  else if(action==='updates')openHubUpdates();
 }
 function openLandingActionInNewTab(action){
   playSound('open');
@@ -942,7 +864,7 @@ function openLandingActionInNewTab(action){
   if(action==='fullscreen'){openLandingInAboutBlank();showErrorToast('New tab opened. Use fullscreen there.');return;}
   const w=window.open('about:blank','_blank');
   if(!w){showErrorToast('Allow popups to open new tab');return;}
-  const runner=`<script>window.addEventListener('load',function(){setTimeout(function(){try{${action==='hub'?'enterHub();':action==='updates'?'openHubUpdates();':''}}catch(e){}},650);});<\/script>`;
+  const runner=`<script>window.addEventListener('load',function(){setTimeout(function(){try{${action==='hub'?'enterHub();':''}}catch(e){}},650);});<\/script>`;
   const html='<!DOCTYPE html>'+document.documentElement.outerHTML.replace('</body>',runner+'</body>');
   w.document.open();
   w.document.write(html);
@@ -960,10 +882,8 @@ window.onload=()=>{
   loadSettings();
   initFeatureExtras();
 
-  ensureHubSidebar();
   installCloakFocusHandlers();
   syncLandingBackground();
-  setInterval(updateHubSidebarVisibility,700);
   try{new MutationObserver(syncLandingBackground).observe(document.body,{attributes:true,attributeFilter:['style']});}catch(e){}
   
   checkGameStatus(true);
@@ -1092,7 +1012,6 @@ function loadSettings(){
   if(ct)ct.value=ST.get('cloakTitle')||'Google Classroom';
   if(cu)cu.value=ST.get('cloakUrl')||'https://classroom.google.com/';
   if(ci)ci.value=ST.get('cloakIcon')||'https://ssl.gstatic.com/classroom/favicon.png';
-  updateUpdateBadges();
 }
 function switchTab(tab,btn){playSound('click');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');}
 function initFeatureExtras(){
@@ -1106,54 +1025,23 @@ function initFeatureExtras(){
   if(ci)ci.value=ST.get('cloakIcon')||'https://ssl.gstatic.com/classroom/favicon.png';
 }
 
-function ensureHubSidebar(){
-  if(!document.body)return;
-  if(!document.getElementById('hub-sidebar-toggle')){
-    const t=document.createElement('button');
-    t.id='hub-sidebar-toggle';
-    t.className='hub-sidebar-toggle';
-    t.title='Open quick menu';
-    t.innerHTML='☰';
-    t.onclick=toggleHubSidebar;
-    document.body.appendChild(t);
-  }
-  if(!document.getElementById('hub-sidebar')){
-    const s=document.createElement('nav');
-    s.id='hub-sidebar';
-    s.className='hub-sidebar closed';
-    s.innerHTML='<div class="hub-sidebar-head"><div class="hub-sidebar-title">Quick Menu</div><button class="hub-sidebar-x" onclick="toggleHubSidebar()">✕</button></div>'+
-      '<button class="hub-sidebar-item" onclick="goMainHomepage()"><span class="ico">🏠</span><span>Home<small>Back to landing</small></span></button>'+
-      '<button class="hub-sidebar-item" onclick="enterHub()"><span class="ico">🎮</span><span>Game Home<small>Open game homepage</small></span></button>'+
-      '<button class="hub-sidebar-item" onclick="showHubSettings()"><span class="ico">⚙️</span><span>Settings<small>Cloak, theme, panic key</small></span></button>'+
-
-      '<button class="hub-sidebar-item" onclick="openLandingInAboutBlank()"><span class="ico">🕶️</span><span>Cloak Tab<small>Open about:blank copy</small></span></button>'+
-      '<button class="hub-sidebar-item" onclick="openMedia1()"><span class="ico">🎬</span><span>Media<small>Open cinema page</small></span></button>'+
-      '<button class="hub-sidebar-item" onclick="openHubUpdates()"><span class="ico">📢</span><span>Updates<small>See what changed</small></span></button>'+
-      '<button class="hub-sidebar-item" onclick="toggleFullscreen()"><span class="ico">⛶</span><span>Fullscreen<small>Toggle screen mode</small></span></button>';
-    document.body.appendChild(s);
-  }
-  updateHubSidebarVisibility();
-}
-function updateHubSidebarVisibility(){
-  const t=document.getElementById('hub-sidebar-toggle'),s=document.getElementById('hub-sidebar');
-  if(!t||!s)return;
-  const show=true;
-  t.style.display=show?'flex':'none';
-  s.style.display=show?'block':'none';
-  if(!show)s.classList.add('closed');
-}
-function toggleHubSidebar(){
-  ensureHubSidebar();
-  const s=document.getElementById('hub-sidebar');
-  if(s)s.classList.toggle('closed');
-  updateHubSidebarVisibility();
-}
 function showHubSettings(){
   const sp=document.getElementById('sp');
   if(sp)sp.classList.add('open');
-  const side=document.getElementById('hub-sidebar');
-  if(side)side.classList.add('closed');
   showErrorToast('Check Settings for cloak, panic key, and themes');
+}
+function showUpdatesPanel(){
+  let modal=document.getElementById('updates-modal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='updates-modal';
+    modal.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px';
+    modal.onclick=e=>{if(e.target===modal)modal.style.display='none';};
+    modal.innerHTML=`<div style="width:min(700px,100%);max-height:82vh;overflow:auto;background:rgba(10,25,47,.96);border:1px solid rgba(100,255,218,.28);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:28px;color:#e6f1ff"><div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px;position:sticky;top:-28px;background:rgba(10,25,47,.98);padding:0 0 12px;z-index:2"><h2 style="color:#64ffda;margin:0;font-size:1.3rem">📢 Changelog</h2><button class="sap" style="width:auto;margin:0;background:var(--danger)" onclick="document.getElementById('updates-modal').style.display='none'">✕</button></div><div style="color:#64ffda;font-weight:800;margin:0 0 8px">Latest</div><ul style="padding-left:20px;line-height:1.8;color:#ccd6f6;font-size:.9rem"><li>Apr 30 — Updates now have dates and cleaner scroll history</li><li>Apr 30 — Theme presets can preview before you click</li><li>Apr 30 — Quick actions added for Settings, Panic, Cloak, and Import/export</li><li>Apr 30 — Loading tips now show during the intro</li><li>Apr 30 — Reset Settings was added</li></ul><div style="color:#64ffda;font-weight:800;margin:18px 0 8px">Earlier</div><ul style="padding-left:20px;line-height:1.8;color:#ccd6f6;font-size:.9rem"><li>New theme presets: Deep Ocean, Neon Shark, Midnight, School Mode, Purple Glow</li><li>Panic key presets for Google, Classroom, Docs, and Drive</li><li>Settings import/export saves more of your setup</li><li>The intro follows your saved colors</li><li>Hub startup cleaned up for smoother loading</li><li>Imposter Game back on the game homepage</li><li>Panic key now saves and works reliably</li><li>Cloak button can open the hub in a blank tab</li><li>Hub detects when games have connection trouble</li><li>Media opens more smoothly from the hub</li></ul></div>`;
+    document.body.appendChild(modal);
+  } else {
+    modal.style.display='flex';
+  }
 }
 
 function openPanicSetup(){
@@ -1168,7 +1056,7 @@ function openCloakSetup(){
 }
 function resetHubSettings(){
   if(!confirm('Reset theme, panic key, cloak, trail, and background settings?'))return;
-  ['pk','panicUrl','theme','customPrimary','customAccent','bgAnim','bgOpacity','hasBg','bgPhoto','trailEnabled','trailType','trailHue','trailSat','trailLit','fc','fh','cloakPreset','cloakTitle','cloakUrl','cloakIcon','updatesSeen'].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+  ['pk','panicUrl','theme','customPrimary','customAccent','bgAnim','bgOpacity','hasBg','bgPhoto','trailEnabled','trailType','trailHue','trailSat','trailLit','fc','fh','cloakPreset','cloakTitle','cloakUrl','cloakIcon'].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
   showErrorToast('Settings reset');
   setTimeout(()=>location.reload(),450);
 }
@@ -1179,26 +1067,6 @@ function showSettingsReminder(){
   m.className='settings-reminder';
   m.innerHTML='<div class="settings-reminder-card"><h2>⚙️ Check Settings</h2><p>New cloak, panic key, theme, and quick menu options are in Settings.</p><div class="settings-reminder-actions"><button class="sap" style="width:auto;padding:12px 18px" onclick="document.querySelector(&quot;.settings-reminder&quot;).remove();showHubSettings()">Open Settings</button><button class="sap" style="width:auto;padding:12px 18px;background:rgba(255,255,255,.06)" onclick="document.querySelector(&quot;.settings-reminder&quot;).remove()">Later</button></div></div>';
   document.body.appendChild(m);
-}
-const UPDATE_VERSION='2026-04-30-feature-pack';
-function updateUpdateBadges(){
-  const seen=ST.get('updatesSeen')===UPDATE_VERSION;
-  document.querySelectorAll('.update-badge').forEach(b=>b.classList.toggle('hidden',seen));
-}
-function markUpdatesSeen(){
-  ST.set('updatesSeen',UPDATE_VERSION);
-  updateUpdateBadges();
-}
-function openHubUpdates(){
-  markUpdatesSeen();
-  let modal=document.getElementById('updates-modal');
-  if(!modal){
-    modal=document.createElement('div');
-    modal.id='updates-modal';
-    modal.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px';
-    modal.innerHTML=`<div style="width:min(760px,100%);max-height:86vh;overflow:auto;background:rgba(10,25,47,.96);border:1px solid rgba(100,255,218,.28);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:28px;color:#e6f1ff"><div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;position:sticky;top:-28px;background:rgba(10,25,47,.98);padding:0 0 12px;z-index:2"><h2 style="color:#64ffda;margin:0">📢 pleasegivemehead Updates</h2><button class="sap" style="width:auto;margin:0;background:var(--danger)" onclick="document.getElementById('updates-modal').style.display='none'">✕</button></div><div style="color:#64ffda;font-weight:800;margin:18px 0 8px">Latest updates <span class="update-tag">New</span></div><ul style="padding-left:22px;line-height:1.75"><li><span class="update-date">Apr 30, 2026</span>📢 Updates now have dates, NEW tags, and cleaner scroll history.</li><li><span class="update-date">Apr 30, 2026</span>👀 Theme presets can preview before you click.</li><li><span class="update-date">Apr 30, 2026</span>⚡ Quick actions were added for Settings, Panic, Cloak, Import/export, and Updates.</li><li><span class="update-date">Apr 30, 2026</span>💡 Loading tips now show during the intro.</li><li><span class="update-date">Apr 30, 2026</span>♻️ Reset Settings was added.</li></ul><div style="color:#64ffda;font-weight:800;margin:22px 0 8px">Earlier updates</div><ul style="padding-left:22px;line-height:1.75"><li><span class="update-date">Apr 30, 2026</span>🔴 Updates show a NEW badge until they are opened.</li><li><span class="update-date">Apr 30, 2026</span>🎨 New theme presets were added: Deep Ocean, Neon Shark, Midnight, School Mode, and Purple Glow.</li><li><span class="update-date">Apr 30, 2026</span>⚡ Panic key presets make it faster to switch to Google, Classroom, Docs, or Drive.</li><li><span class="update-date">Apr 30, 2026</span>💾 Settings import/export saves more of your setup.</li><li><span class="update-date">Apr 30, 2026</span>🎨 The intro follows your saved colors while keeping the darker underwater look.</li><li><span class="update-date">Apr 30, 2026</span>🖥️ The intro color fills the whole screen more evenly.</li><li><span class="update-date">Apr 30, 2026</span>🔧 The hub startup was cleaned up so it loads more smoothly.</li><li><span class="update-date">Apr 30, 2026</span>🎭 Imposter Game is back on the game homepage.</li><li><span class="update-date">Apr 30, 2026</span>⚡ Panic key saves both the key and the panic site URL.</li><li><span class="update-date">Apr 30, 2026</span>🕶️ Cloak presets can rename the tab to Classroom, Docs, or Drive.</li><li><span class="update-date">Apr 30, 2026</span>🎨 Custom theme saver lets you save your own main colors.</li><li><span class="update-date">Apr 30, 2026</span>✨ The intro has a cleaner animated start.</li><li><span class="update-date">Apr 30, 2026</span>🛡️ Extra code protection blocks more shortcuts and copying.</li><li><span class="update-date">Apr 30, 2026</span>🎮 Imposter Game opens through the hub.</li><li><span class="update-date">Apr 30, 2026</span>🎬 Media opens more smoothly from the hub.</li></ul></div>`;
-    document.body.appendChild(modal);
-  }else modal.style.display='flex';
 }
 
 const HAMMER_TITLE='pleasegivemehead';
@@ -1342,8 +1210,6 @@ function enterHub(){
   lastTrailY=-9999;
   if(fishCanvas)fishCanvas.style.display='none';
   initHomepageTest();
-  ensureHubSidebar();
-  updateHubSidebarVisibility();
   setTimeout(showSettingsReminder,650);
 }
 function goMainHomepage(){
@@ -1357,7 +1223,6 @@ function goMainHomepage(){
   lastTrailX=-9999;
   lastTrailY=-9999;
   if(fishCanvas)fishCanvas.style.display='none';
-  updateHubSidebarVisibility();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1365,14 +1230,6 @@ function goMainHomepage(){
 /* CLOCK */
 function updateClock(){const now=new Date();document.getElementById('clock-time').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});document.getElementById('clock-date').textContent=now.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});}
 function startPlayTimer(){setInterval(()=>{totalPlayTime++;if(totalPlayTime%60===0)ST.set('playTime',totalPlayTime);const h=Math.floor(totalPlayTime/3600),m=Math.floor((totalPlayTime%3600)/60);document.getElementById('timer-display').textContent=`${h}:${m.toString().padStart(2,'0')}`;document.getElementById('total-time').textContent=`Total: ${h}h ${m}m`;if(totalPlayTime===3600)checkAchievements();},1000);}
-function openUpdates(){
-  markUpdatesSeen();
-  alert("Latest updates:\n• Apr 30, 2026 — Updates now have dates, NEW tags, and cleaner scroll history\n• Apr 30, 2026 — Theme presets can preview before you click\n• Apr 30, 2026 — Quick actions were added for Settings, Panic, Cloak, Import/export, and Updates\n• Apr 30, 2026 — Loading tips now show during the intro\n• Apr 30, 2026 — Reset Settings was added\n\nEarlier updates:\n• New update badge shows when there are fresh changes\n• Added quick theme presets: Deep Ocean, Neon Shark, Midnight, School Mode, and Purple Glow\n• Added panic key presets for Google, Classroom, Docs, and Drive\n• Settings import/export now saves more of your setup\n• The intro now follows your saved colors while keeping the darker underwater look\n• The intro color fills the whole screen more evenly\n• The hub startup was cleaned up so it loads more smoothly\n• Imposter Game is back on the game homepage\n• Panic key now saves and works, and fullscreen, sound effects, and data tools work better\n• Your colors, background, and mouse trail choices now stay saved\n• The Cloak button can open the hub in a blank tab\n• The hub can tell when games are having connection trouble\n• The offline screen now has retry, Media, and Suggestions buttons\n• Media opens more smoothly from the hub");
-  const w=window.open('about:blank','_blank');
-  if(!w)return;
-  w.document.write(`<!DOCTYPE html><html><head><title>Updates</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:linear-gradient(-45deg,#0a192f,#112240,#0d47a1,#1565c0);background-size:400% 400%;animation:bg 15s ease infinite;min-height:100vh;font-family:-apple-system,sans-serif;color:#e6f1ff}.shell{min-height:100vh;display:flex;flex-direction:column}.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:rgba(10,25,47,.96);border-bottom:1px solid rgba(100,255,218,.18)}.ttl{font-weight:800;color:#64ffda;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.acts{display:flex;gap:10px;align-items:center}.bar button{border:none;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.back{background:linear-gradient(135deg,#64ffda,#00b4d8);color:#0a192f}.close{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(100,255,218,.18)}.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}@keyframes bg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}.c{background:rgba(10,25,47,.85);border:2px solid #1e3a5f;border-radius:20px;padding:40px;max-width:680px;width:100%}h1{background:linear-gradient(90deg,#64ffda,#00b4d8,#0077b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:32px;margin-bottom:20px}.h{color:#64ffda;font-size:15px;font-weight:bold;margin:16px 0 8px;border-bottom:1px solid #1e3a5f;padding-bottom:4px}ul{list-style:none}li{color:#ccd6f6;font-size:14px;padding:4px 0 4px 18px;position:relative}li::before{content:"\\2726";position:absolute;left:0;color:#64ffda;font-size:10px;top:6px}</style></head><body><div class="shell"><div class="bar"><button class="back" onclick="if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else{const w=window.open('about:blank','_blank');if(w){w.document.open();w.document.write(localStorage.getItem('pleasegivemeheadHTML')||'');w.document.close();}}">← Back to Landing</button><div class="ttl">📢 Updates</div><div class="acts"><button class="close" onclick="window.close()">✕ Close</button></div></div><div class="wrap"><div class="c"><h1>👅 pleasegivemehead Updates</h1><div class="h">Latest updates</div><ul><li>⚙️ Panic key now saves and works, and fullscreen, sound effects, and data tools work better</li><li>💾 Your colors, background, and mouse trail choices now stay saved</li><li>🕶️ The Cloak button can open the hub in a blank tab</li><li>🛠️ The hub can tell when games are having connection trouble</li><li>🔧 The offline screen now has retry, Media, and Suggestions buttons</li><li>🎮 The games area has been cleaned up so it is easier to open and use</li><li>🎬 Media opens more smoothly from the hub</li><li>🎨 The landing page better matches your selected background style</li></ul></div></div></div></body></html>`);
-}
-function openLatestUpdates(){openUpdates();}
 function openLandingInAboutBlank(){
   const w=window.open('about:blank','_blank');
   if(!w)return;
