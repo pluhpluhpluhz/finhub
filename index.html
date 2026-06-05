@@ -1094,7 +1094,6 @@ window.onload=()=>{
   loadSettings();
   initVisitorCounter();
   initFeatureExtras();
-  setTimeout(showCreditsOnStartup,900);
 
   ensureHubSidebar();
   installCloakFocusHandlers();
@@ -1521,7 +1520,6 @@ function initHomepageTest(){
   s.onload=start;
   document.body.appendChild(s);
 }
-function enterHub(){playSound('open');document.getElementById('lp').style.display='none';document.getElementById('main-content').style.display='block';trailEnabled=true;ST.set('trailEnabled','true');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='block';if(trailType==='fish'&&trailEnabled)initFish();initHomepageTest();ensureHubSidebar();updateHubSidebarVisibility();setTimeout(showSettingsReminder,650);}
 function enterHub(){playSound('open');document.getElementById('lp').style.display='none';document.getElementById('main-content').style.display='block';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';initHomepageTest();ensureHubSidebar();updateHubSidebarVisibility();setTimeout(showSettingsReminder,650);}
 function goMainHomepage(){playSound('click');closeGame();document.getElementById('sp').classList.remove('open');document.getElementById('main-content').style.display='none';document.getElementById('lp').style.display='flex';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';updateHubSidebarVisibility();window.scrollTo({top:0,behavior:'smooth'});}
 
