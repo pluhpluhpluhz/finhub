@@ -310,7 +310,12 @@
     /* Plain mode: remove decorative effects while keeping content */
     *,:before,:after{animation:none!important;transition:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;backdrop-filter:none!important}
     .orb,.bubble-lp,.maint-particles,.sakura,#bg-canvas{display:none!important}
-    html,body,#lp,#maintenance-page,.con,#sp,#go,#cb,#gcw,#data-modal .modal-content,.hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,.cov,.nm,.fb,.pb,button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.b7,.bs,.aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn{background-image:none!important}
+    html,body,#lp,#maintenance-page,.con,#sp,#go,#cb,#gcw,#data-modal .modal-content,
+    .hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,
+    .cov,.nm,.fb,.pb,button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.b7,.bs,
+    .aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn{
+      background-image:none!important
+    }
     body,#lp,#maintenance-page,.con,#sp,#go,.hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card{background-color:#0f172a!important}
     button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.b7,.bs,.aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn,.pb{background-color:#1e293b!important;color:#e2e8f0!important;border:1px solid #475569!important}
     h1,.lt,.maint-icon{background:none!important;-webkit-text-fill-color:currentColor!important;color:#e2e8f0!important}
@@ -1501,11 +1506,6 @@ function initAnimatedIntro(){
 function initHomepageTest(){
   const mount=document.getElementById('test-homepage-games');
   if(!mount)return;
-  if(!mount.dataset.trailBound){
-    mount.dataset.trailBound='1';
-    mount.addEventListener('mousemove',handleTrailMove,{passive:true});
-    mount.addEventListener('pointermove',handleTrailMove,{passive:true});
-  }
   if(mount.dataset.ready==='1')return;
   mount.dataset.ready='1';
   const start=()=>{
@@ -1649,8 +1649,6 @@ function toggleTrail(){
   document.getElementById('trail-toggle').classList.remove('active');
   destroyFish();
 }
-function handleTrailMove(){}
-function handleFishClick(){}
 function spawnTrail(x,y){
   const el=document.createElement('div');
   const c=getTrailColor();
@@ -1687,7 +1685,7 @@ function spawnTrail(x,y){
 
 /* BACKGROUND ANIMATIONS */
 window.bgAnimGen=0;
-function setBackgroundAnim(){
+function setBackgroundAnim(type){
   ST.set('bgAnim','none');
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
   if(window.bgAnimReq){cancelAnimationFrame(window.bgAnimReq);window.bgAnimReq=null;}
