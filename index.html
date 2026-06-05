@@ -307,6 +307,14 @@
     ::-webkit-scrollbar-track{background:rgba(100,255,218,.05);border-radius:5px}
     ::-webkit-scrollbar-thumb{background:rgba(100,255,218,.2);border-radius:5px;border:2px solid transparent;background-clip:content-box}
     ::selection{background:rgba(100,255,218,.3);color:#fff}
+    /* Plain mode: remove decorative effects while keeping content */
+    *,:before,:after{animation:none!important;transition:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;backdrop-filter:none!important}
+    .orb,.bubble-lp,.maint-particles,.sakura,#bg-canvas{display:none!important}
+    html,body,#lp,#maintenance-page,.con,#sp,#go,#cb,#gcw,#data-modal .modal-content,.hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,.cov,.nm,.fb,.pb,button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.b7,.bs,.aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn{background-image:none!important}
+    body,#lp,#maintenance-page,.con,#sp,#go,.hub-sidebar,.settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card{background-color:#0f172a!important}
+    button,.maint-btn,.setb,.sap,.b1,.b2,.b3,.b4,.b6,.b7,.bs,.aib,.rndb,.ctb,.sort-btn,.hub-sidebar-item,.hub-sidebar-toggle,.cloak-btn,.pb{background-color:#1e293b!important;color:#e2e8f0!important;border:1px solid #475569!important}
+    h1,.lt,.maint-icon{background:none!important;-webkit-text-fill-color:currentColor!important;color:#e2e8f0!important}
+    .nm,.pb,.fb{opacity:1!important;transform:none!important}
     @media(max-width:768px){.gg{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}#sp{width:100%}#clock-widget{top:12px;right:12px;padding:12px 16px}.lt{font-size:2.5rem}.maint-message{font-size:1.8rem}#cb{padding:14px 16px}#cb .game-actions{width:100%;justify-content:flex-start}#cb .game-actions button{flex:1 1 auto}}
     </style>
     <base target="_self">
@@ -731,7 +739,7 @@ let ratings=JSON.parse(ST.get('ratings')||'{}');
 let playCount=parseInt(ST.get('playCount')||'0');
 let achievements=JSON.parse(ST.get('achievements')||'[]');
 let totalPlayTime=parseInt(ST.get('playTime')||'0');
-let trailEnabled=true;
+let trailEnabled=false;
 let trailType=ST.get('trailType')||'bubble';
 let trailHue=parseInt(ST.get('trailHue')||'180');
 let trailSat=parseInt(ST.get('trailSat')||'100');
@@ -1082,12 +1090,6 @@ window.onload=()=>{
   startPlayTimer();updateClock();setInterval(updateClock,1000);
   loadAchievements();
   document.addEventListener('keydown',handlePanicKey,true);
-  document.addEventListener('mousemove',handleTrailMove,{passive:true});
-  window.addEventListener('mousemove',handleTrailMove,{passive:true});
-  window.addEventListener('pointermove',handleTrailMove,{passive:true});
-  document.getElementById('lp').addEventListener('mousemove',handleTrailMove,{passive:true});
-  document.getElementById('lp').addEventListener('pointermove',handleTrailMove,{passive:true});
-  document.addEventListener('click',handleFishClick);
   window.addEventListener('resize',()=>{if(fishCanvas){fishCanvas.width=window.innerWidth;fishCanvas.height=window.innerHeight;}});
   loadSettings();
   initVisitorCounter();
@@ -1100,13 +1102,8 @@ window.onload=()=>{
   setInterval(updateHubSidebarVisibility,700);
   try{new MutationObserver(syncLandingBackground).observe(document.body,{attributes:true,attributeFilter:['style']});}catch(e){}
   
-  // Initialize maintenance page particles
-  initMaintParticles();
-  
   checkGameStatus(true);
   setInterval(()=>checkGameStatus(false),300000);
-  
-  document.querySelectorAll('button').forEach(btn=>{btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.setProperty('--x',((e.clientX-r.left)/r.width)*100+'%');btn.style.setProperty('--y',((e.clientY-r.top)/r.height)*100+'%');});});
 };
 
 
@@ -1204,16 +1201,13 @@ function importData(){
 }
 function loadSettings(){
   const validTrailTypes=['bubble','glow','comet','rainbow','star','snow','fire','ripple','lightning','heart','leaf','petal','matrix','sparkle','neon','fish'];
-  trailEnabled=ST.get('trailEnabled')!=='false';
-  if(!validTrailTypes.includes(trailType)){
-    trailType='bubble';
-    ST.set('trailType','bubble');
-  }
-  const ba=ST.get('bgAnim');
-  if(ba&&ba!=='none'){setBackgroundAnim(ba);const el=document.getElementById('bg-anim');if(el)el.value=ba;}
-  const tt=ST.get('trailType');
-  if(tt&&validTrailTypes.includes(tt))trailType=tt;
-  else {trailType='bubble';ST.set('trailType','bubble');}
+  trailEnabled=false;
+  ST.set('trailEnabled','false');
+  trailType='bubble';
+  ST.set('trailType','bubble');
+  setBackgroundAnim('none');
+  const bgSelect=document.getElementById('bg-anim');
+  if(bgSelect)bgSelect.value='none';
   const trailSel=document.getElementById('trail-select');if(trailSel)trailSel.value=trailType;
   if(ST.get('timerVisible')==='true')document.getElementById('playtimer').classList.add('visible');
   if(sfxEnabled)document.getElementById('sfx-toggle').classList.add('active');
@@ -1528,7 +1522,8 @@ function initHomepageTest(){
   document.body.appendChild(s);
 }
 function enterHub(){playSound('open');document.getElementById('lp').style.display='none';document.getElementById('main-content').style.display='block';trailEnabled=true;ST.set('trailEnabled','true');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='block';if(trailType==='fish'&&trailEnabled)initFish();initHomepageTest();ensureHubSidebar();updateHubSidebarVisibility();setTimeout(showSettingsReminder,650);}
-function goMainHomepage(){playSound('click');closeGame();document.getElementById('sp').classList.remove('open');document.getElementById('main-content').style.display='none';document.getElementById('lp').style.display='flex';lastTrailX=-9999;lastTrailY=-9999;if(trailType==='fish'&&trailEnabled){if(!fishCanvas)initFish();else fishCanvas.style.display='block';}else if(fishCanvas)fishCanvas.style.display='none';updateHubSidebarVisibility();window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>initAnimatedIntro(),60);}
+function enterHub(){playSound('open');document.getElementById('lp').style.display='none';document.getElementById('main-content').style.display='block';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';initHomepageTest();ensureHubSidebar();updateHubSidebarVisibility();setTimeout(showSettingsReminder,650);}
+function goMainHomepage(){playSound('click');closeGame();document.getElementById('sp').classList.remove('open');document.getElementById('main-content').style.display='none';document.getElementById('lp').style.display='flex';trailEnabled=false;ST.set('trailEnabled','false');lastTrailX=-9999;lastTrailY=-9999;if(fishCanvas)fishCanvas.style.display='none';updateHubSidebarVisibility();window.scrollTo({top:0,behavior:'smooth'});}
 
 
 /* CLOCK */
@@ -1652,11 +1647,12 @@ function setTrailType(type,silent){
   if(!silent)playSound('click');
 }
 function toggleTrail(){
-  trailEnabled=!trailEnabled;ST.set('trailEnabled',trailEnabled);
-  document.getElementById('trail-toggle').classList.toggle('active',trailEnabled);
-  if(trailType==='fish'){if(trailEnabled)initFish();else destroyFish();}
+  trailEnabled=false;ST.set('trailEnabled','false');
+  document.getElementById('trail-toggle').classList.remove('active');
+  destroyFish();
 }
 function handleTrailMove(e){
+  return;
   const x=e.clientX,y=e.clientY;
   fishCX=x;fishCY=y;
   if(!trailEnabled)return;
@@ -1667,6 +1663,7 @@ function handleTrailMove(e){
   spawnTrail(x,y);
 }
 function handleFishClick(){
+  return;
   if(trailType==='fish'&&trailEnabled&&fishList.length){
     fishList.forEach(f=>{const a=Math.random()*Math.PI*2,s=4+Math.random()*8;f.vx=Math.cos(a)*s;f.vy=Math.sin(a)*s;f.scattered=true;});
     setTimeout(()=>fishList.forEach(f=>{f.scattered=false;f.vx=0;f.vy=0;}),2200);
@@ -1709,7 +1706,8 @@ function spawnTrail(x,y){
 /* BACKGROUND ANIMATIONS */
 window.bgAnimGen=0;
 function setBackgroundAnim(type){
-  ST.set('bgAnim',type);
+  type='none';
+  ST.set('bgAnim','none');
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
   if(window.bgAnimReq){cancelAnimationFrame(window.bgAnimReq);window.bgAnimReq=null;}
   window.bgAnimGen++;
