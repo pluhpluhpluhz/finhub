@@ -242,21 +242,6 @@
 </head>
 <body>
 <script>
-(function(){
-  const block=e=>{e.preventDefault();e.stopPropagation();return false;};
-  document.addEventListener('contextmenu',block,true);
-  document.addEventListener('dragstart',block,true);
-  document.addEventListener('selectstart',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;block(e);},true);
-  document.addEventListener('copy',e=>{if(e.target&&['INPUT','TEXTAREA'].includes(e.target.tagName))return;block(e);},true);
-  document.addEventListener('keydown',function(e){
-    const k=(e.key||'').toLowerCase();
-    if(k==='f12'||(e.ctrlKey&&e.shiftKey&&['i','j','c','k'].includes(k))||(e.ctrlKey&&['u','s','p'].includes(k))){
-      block(e);
-      alert('Code is protected.');
-    }
-  },true);
-  setInterval(()=>{try{console.clear();}catch(e){}},700);
-})();
 </script>
 
 
@@ -1263,15 +1248,47 @@ function moLoadUrl(){
   let url=(document.getElementById('mo-url').value||'').trim();
   if(!url)return;
   if(!/^https?:\/\//i.test(url))url='https://'+url;
+
   const frame=document.getElementById('mo-frame');
-  frame.src=url;
+
+  frame.onload=function(){
+    try{
+      const doc=frame.contentDocument||frame.contentWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><style>
+        html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
+        iframe{width:100%;height:100%;border:none}
+      </style></head><body>
+      <iframe src="${url.replace(/"/g,'&quot;')}" allowfullscreen></iframe>
+      </body></html>`);
+      doc.close();
+    }catch(e){}
+  };
+
+  frame.src='about:blank';
   frame.style.display='block';
   document.getElementById('mo-placeholder').style.display='none';
 }
 function moSetPreset(url){
   document.getElementById('mo-url').value=url;
+
   const frame=document.getElementById('mo-frame');
-  frame.src=url;
+
+  frame.onload=function(){
+    try{
+      const doc=frame.contentDocument||frame.contentWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><style>
+        html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
+        iframe{width:100%;height:100%;border:none}
+      </style></head><body>
+      <iframe src="${url.replace(/"/g,'&quot;')}" allowfullscreen></iframe>
+      </body></html>`);
+      doc.close();
+    }catch(e){}
+  };
+
+  frame.src='about:blank';
   frame.style.display='block';
   document.getElementById('mo-placeholder').style.display='none';
 }
