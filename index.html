@@ -224,7 +224,7 @@
     ::-webkit-scrollbar-thumb{background:rgba(100,255,218,.2);border-radius:5px;border:2px solid transparent;background-clip:content-box}
     ::selection{background:rgba(100,255,218,.3);color:#fff}
     /* Plain mode: remove decorative effects while keeping content */
-    
+    *,:before,:after{animation:none!important;transition:none!important;box-shadow:none!important;text-shadow:none!important;filter:none!important;backdrop-filter:none!important}
     .orb,.bubble-lp,.maint-particles,.sakura,#bg-canvas{display:none!important}
     html,body,#lp,#maintenance-page,.con,#sp,#go,#cb,#gcw,#data-modal .modal-content,
     .settings-reminder-card,#test-homepage-wrap,#test-homepage-games,.card,
@@ -279,40 +279,6 @@ to{transform:translateY(80px)}
 @keyframes starDrift{
 from{transform:translateY(0)}
 to{transform:translateY(-200px)}
-}
-
-
-#test-homepage-wrap{
-position:relative;
-overflow:hidden;
-}
-
-#test-homepage-wrap::before{
-content:'';
-position:absolute;
-inset:0;
-background:
-radial-gradient(circle at 20% 30%,rgba(100,255,218,.18),transparent 20%),
-radial-gradient(circle at 80% 60%,rgba(0,180,216,.15),transparent 25%),
-radial-gradient(circle at 50% 80%,rgba(0,119,182,.18),transparent 20%);
-filter:blur(80px);
-animation:auroraMove 18s ease-in-out infinite alternate;
-pointer-events:none;
-}
-
-#test-homepage-wrap::after{
-content:'';
-position:absolute;
-inset:0;
-background:repeating-linear-gradient(
-90deg,
-transparent 0px,
-rgba(100,255,218,.03) 1px,
-transparent 2px,
-transparent 80px);
-animation:gridScroll 10s linear infinite;
-opacity:.25;
-pointer-events:none;
 }
 
 </style>
@@ -519,6 +485,7 @@ pointer-events:none;
             <div class="slbl">💾 Settings import / export</div>
             <button class="sap" onclick="exportData()">Export Settings Code</button>
             <button class="sap" onclick="document.getElementById('data-modal').style.display='flex'">Import Settings Code</button>
+          </div>
         </div>
         <div id="tab-customization" class="tab-panel">
 
