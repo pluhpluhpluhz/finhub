@@ -438,10 +438,6 @@
             <button class="sap" onclick="document.getElementById('data-modal').style.display='flex'">Import Settings Code</button>
             <p style="color:var(--text-secondary);font-size:0.8rem;margin-top:8px">Saves favorites, play stats, panic key, themes, cloak choices, trails, and background settings.</p>
           </div>
-          <div class="ssec">
-            <div class="slbl">📢 Updates</div>
-            <button class="sap" onclick="showUpdatesPanel()">View Changelog</button>
-          </div>
         </div>
         <div id="tab-customization" class="tab-panel">
 
@@ -998,20 +994,6 @@ function showHubSettings(){
   if(sp)sp.classList.add('open');
   showErrorToast('Check Settings for cloak, panic key, and themes');
 }
-function showUpdatesPanel(){
-  let modal=document.getElementById('updates-modal');
-  if(!modal){
-    modal=document.createElement('div');
-    modal.id='updates-modal';
-    modal.style.cssText='position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:22px';
-    modal.onclick=e=>{if(e.target===modal)modal.style.display='none';};
-    modal.innerHTML=`<div style="width:min(700px,100%);max-height:82vh;overflow:auto;background:rgba(10,25,47,.96);border:1px solid rgba(100,255,218,.28);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:28px;color:#e6f1ff"><div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px;position:sticky;top:-28px;background:rgba(10,25,47,.98);padding:0 0 12px;z-index:2"><h2 style="color:#64ffda;margin:0;font-size:1.3rem">📢 Changelog</h2><button class="sap" style="width:auto;margin:0;background:var(--danger)" onclick="document.getElementById('updates-modal').style.display='none'">✕</button></div><div style="color:#64ffda;font-weight:800;margin:0 0 8px">Latest</div><ul style="padding-left:20px;line-height:1.8;color:#ccd6f6;font-size:.9rem"><li>Apr 30 — Updates now have dates and cleaner scroll history</li><li>Apr 30 — Theme presets can preview before you click</li><li>Apr 30 — Quick actions added for Settings, Panic, Cloak, and Import/export</li><li>Apr 30 — Loading tips now show during the intro</li><li>Apr 30 — Reset Settings was added</li></ul><div style="color:#64ffda;font-weight:800;margin:18px 0 8px">Earlier</div><ul style="padding-left:20px;line-height:1.8;color:#ccd6f6;font-size:.9rem"><li>New theme presets: Deep Ocean, Neon Shark, Midnight, School Mode, Purple Glow</li><li>Panic key presets for Google, Classroom, Docs, and Drive</li><li>Settings import/export saves more of your setup</li><li>The intro follows your saved colors</li><li>Hub startup cleaned up for smoother loading</li><li>Imposter Game back on the game homepage</li><li>Panic key now saves and works reliably</li><li>Cloak button can open the hub in a blank tab</li><li>Hub detects when games have connection trouble</li><li>Media opens more smoothly from the hub</li></ul></div>`;
-    document.body.appendChild(modal);
-  } else {
-    modal.style.display='flex';
-  }
-}
-
 function openPanicSetup(){
   showHubSettings();
   switchTab('main',document.querySelector(".tab-btn[onclick*='main']")||document.querySelector('.tab-btn'));
